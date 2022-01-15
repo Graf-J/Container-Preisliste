@@ -2,34 +2,12 @@ const db = require('../db/psql');
 const jwt = require('jsonwebtoken');
 
 const handleError = (err) => {
-    try {
-        const error = String(err);
-
-        if (error.includes('user.username cannot be null')) {
-            return 'Username is required';
-        } else if (error.includes('Username is required')) {
-            return 'Username is required';
-        } else if (error.includes('WHERE parameter "name" has invalid "undefined" value')) {
-            return 'Username is required';
-        } else if (error.includes('user.password cannot be null')) {
-            return 'Password is required';
-        } else if (error.includes('Password is required')) {
-            return 'Password is required';
-        } else if (error.includes('Password has to be at least 8 Characters long')) {
-            return 'Password has to be at least 8 Characters long';
-        } else if (error.includes('No User found')) {
-            return 'No User found';
-        } else if (error.includes('Invalid Password')) {
-            return 'Invalid Password';
-        } else if (error.includes('Invalid Username')) {
-            return 'Invalid Username';
-        } else if (error.includes('User already signed up')) {
-            return 'User already signed up';
-        } else {
-            return 'Unknown Error';
-        }
-    } catch {
-        return 'Unknown Error';
+    if (err.message === 'No User found') {
+        return 404;
+    } else if (err.message === 'User already signed up') {
+        return 406;
+    } else {
+        return 401;
     }
 }
 
@@ -45,7 +23,7 @@ module.exports.signup = async (req, res) => {
     try {
         const user = await db.User.findOne({ where: { name: req.body.name }})
         if (!user) {
-            throw new Error('Invalid Username');
+            throw new Error('No User found');
         }
         if (user.password) {
             throw new Error('User already signed up');
@@ -57,17 +35,17 @@ module.exports.signup = async (req, res) => {
 
         const token = generateToken(user.id, user.role);
         res.cookie('jwt', token, {
-            maxAge: maxAge * 1000,
-            httpOnly: true
+            maxAge: maxAge * 1000
         });
         res.status(201).json({ 
             name: user.name,
+            money: user.money,
             jwt: token
         });
 
     } catch(err) {
-        const error = handleError(err);
-        res.status(401).json({ error });
+        const errorCode = handleError(err);
+        res.status(errorCode).send('Signup failed');
     }
 }
 
@@ -77,15 +55,15 @@ module.exports.login = async (req, res) => {
         const token = generateToken(user.id, user.role);
         res.cookie('jwt', token, {
             maxAge: maxAge * 1000,
-            httpOnly: true
         });
         res.json({
             name: user.name,
+            money: user.money,
             jwt: token
         })
     } catch(err) {
-        const error = handleError(err);
-        res.status(400).json({ error });
+        const errorCode = handleError(err);
+        res.status(errorCode).send('Login failed');
     }
 }
 

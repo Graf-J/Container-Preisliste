@@ -17,6 +17,7 @@ const Signup = () => {
         wrongPassword: false,
         wrongSecondaryPassword: false,
         userMessage: '',
+        passwordMessage: '',
         secondaryPasswordMessage: ''
     });
 
@@ -30,8 +31,12 @@ const Signup = () => {
 
     const onSignup = async () => {
         try {
+            if (password.length < 8) {
+                setSignupStatus({ unknownUser: false, wrongPassword: true, wrongSecondaryPassword: true, userMessage: '', passwordMessage: 'Password shorter than 8 characters', secondaryPasswordMessage: '' });
+                return;
+            }
             if (!(password === secondaryPassword)) {
-                setSignupStatus({ unknownUser: false, wrongPassword: true, wrongSecondaryPassword: true, userMessage: '', secondaryPasswordMessage: 'Passwords are different'});
+                setSignupStatus({ unknownUser: false, wrongPassword: true, wrongSecondaryPassword: true, userMessage: '', passwordMessage: '', secondaryPasswordMessage: 'Passwords are different' });
                 return;
             }
             const user = await signup(name, password);
@@ -39,11 +44,11 @@ const Signup = () => {
             navigate('../');
         } catch (err) {
             if (err.message === 'User doesnt exist') {
-                setSignupStatus({ unknownUser: true, wrongPassword: false, wrongSecondaryPassword: false, userMessage: 'User does not exist. Contact Admin.', secondaryPasswordMessage: ''});
+                setSignupStatus({ unknownUser: true, wrongPassword: false, wrongSecondaryPassword: false, userMessage: 'User does not exist. Contact Admin.', passwordMessage: '', secondaryPasswordMessage: '' });
             } else if (err.message === 'User already signed up') {
-                setSignupStatus({ unknownUser: true, wrongPassword: false, wrongSecondaryPassword: false, userMessage: 'User already signed up.', secondaryPasswordMessage: ''});
+                setSignupStatus({ unknownUser: true, wrongPassword: false, wrongSecondaryPassword: false, userMessage: 'User already signed up.', passwordMessage: '', secondaryPasswordMessage: '' });
             } else {
-                setSignupStatus({ unknownUser: true, wrongPassword: true, wrongSecondaryPassword: true, userMessage: '', secondaryPasswordMessage: 'Signup failed'});
+                setSignupStatus({ unknownUser: true, wrongPassword: true, wrongSecondaryPassword: true, userMessage: '', passwordMessage: '', secondaryPasswordMessage: 'Signup failed' });
             }
         }
     }

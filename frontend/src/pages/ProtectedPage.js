@@ -13,7 +13,7 @@ const ProtectedPage = ({ element }) => {
             return true;
         }
         else if (document.cookie) {
-            dispatch(set({ name: '', money: 0, jwt: document.cookie.split('=')[1] }));
+            dispatch(set({ name: null, money: null, jwt: document.cookie.split('=')[1] }));
             return true;
         }
         return false;

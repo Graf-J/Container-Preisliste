@@ -18,7 +18,7 @@ const ProtectedPage = ({ element }) => {
         }
         else if (document.cookie) {
             const jwt = document.cookie.split('=')[1];
-            dispatch(set({ name: '', money: 0, jwt: jwt }));
+            dispatch(set({ name: null, money: null, jwt: jwt }));
             const decodedToken = jwt_decode(jwt);
             if (decodedToken.role === 'admin') {
                 return true;

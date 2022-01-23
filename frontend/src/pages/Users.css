@@ -1,0 +1,79 @@
+.users {
+    width: 100vw;
+    height: 100vh;
+    background: #343434;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.users-table-wrapper {
+    height: 95vh;
+    width: 90vw;
+    background: #202020;
+    border-radius: 10px;
+    padding: 10px;
+    overflow-y: scroll;
+}
+
+.user-icons-wrapper {
+    width: 50%;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.user-settings {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.add-user-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-user-modal-box {
+    width: 95vw;
+    background: rgb(243, 243, 243);
+    border-radius: 10px;
+    padding: 30px;
+}
+
+.username-input {
+    width: 100%;
+}
+
+.reset-user-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reset-user-modal-box {
+    width: 95vw;
+    background: rgb(243, 243, 243);
+    border-radius: 10px;
+    padding: 30px;
+}
+
+.delete-user-modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-user-modal-box {
+    width: 95vw;
+    background: rgb(243, 243, 243);
+    border-radius: 10px;
+    padding: 30px;
+}
+
+.modal-button-wrapper {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+}

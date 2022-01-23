@@ -1,32 +1,20 @@
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { set } from './redux/user';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
+import UnprotectedPage from './pages/UnprotectedPage';
 import ProtectedPage from './pages/ProtectedPage';
+import AdminPage from './pages/AdminPage';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import Users from './pages/Users';
 
 function App() {
-
-  const navigator = useNavigate();
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (document.cookie) {
-      dispatch(set({ name: '', money: 0, jwt: document.cookie.split('=')[1] }));
-      navigator('../');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <div>
       <Routes>
         <Route path="/" element={ <ProtectedPage element={ <Home /> } /> } />
-        <Route path="login" element={ <Login /> } />
-        <Route path="signup" element={ <Signup /> } />
+        <Route path="login" element={ <UnprotectedPage element={ <Login /> } /> } />
+        <Route path="signup" element={ <UnprotectedPage element={ <Signup /> } /> } />
+        <Route path="users" element={ <AdminPage element={ <Users /> } /> } />
       </Routes>
     </div>
   );

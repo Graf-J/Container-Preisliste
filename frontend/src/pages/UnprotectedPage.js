@@ -3,27 +3,27 @@ import { useSelector } from 'react-redux';
 import { set } from '../redux/user';
 import { Navigate } from 'react-router-dom';
 
-const ProtectedPage = ({ element }) => {
+const UnprotectedPage = ({ element }) => {
     const { user } = useSelector(state => state.user);
     
     const dispatch = useDispatch();
 
     const userExists = () => {
         if (user) {
-            return true;
+            return false;
         }
         else if (document.cookie) {
             dispatch(set({ name: '', money: 0, jwt: document.cookie.split('=')[1] }));
-            return true;
+            return false;
         }
-        return false;
+        return true;
     }
 
     return (
         <>
-            { userExists() ? element : <Navigate to='login' /> }
+            { userExists() ? element : <Navigate to='../' /> }
         </>
     )
 }
 
-export default ProtectedPage
+export default UnprotectedPage

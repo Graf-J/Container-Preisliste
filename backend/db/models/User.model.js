@@ -35,15 +35,19 @@ module.exports = (sequelize) => {
         password: {
             type: DataTypes.STRING,
             set(value) {
-                if (value.length < 8) {
-                    throw new ValidationError('Password has to be at least 8 Characters long', [new ValidationErrorItem('Password has to be at least 8 Characters long')]);
+                if (value) {
+                    if (value.length < 8) {
+                        throw new ValidationError('Password has to be at least 8 Characters long', [new ValidationErrorItem('Password has to be at least 8 Characters long')]);
+                    }
+                    
+                    // Somehow only the following Sync Methods work here
+                    const saltRounds = parseInt(process.env.SALT_ROUNDS);
+                    const salt = bcrypt.genSaltSync(saltRounds);
+                    const hashedPassword = bcrypt.hashSync(value, salt);
+                    this.setDataValue('password', hashedPassword);
+                } else {
+                    this.setDataValue('password', null);
                 }
-                
-                // Somehow only the following Sync Methods work here
-                const saltRounds = parseInt(process.env.SALT_ROUNDS);
-                const salt = bcrypt.genSaltSync(saltRounds);
-                const hashedPassword = bcrypt.hashSync(value, salt);
-                this.setDataValue('password', hashedPassword);
             }
         },
         role: {
@@ -52,8 +56,15 @@ module.exports = (sequelize) => {
             defaultValue: 'user'
         },
         money: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.FLOAT,
             defaultValue: 0
+        },
+        active: {
+            type: DataTypes.VIRTUAL(DataTypes.BOOLEAN, ['password']),
+            get: function() {
+                if (this.get('password')) return true;
+                return false;
+            }
         }
     }, {
         sequelize,

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import CircularProgress from '@mui/material/CircularProgress';
+import LinearProgress from '@mui/material/LinearProgress';
 import Accordion from '@mui/material/Accordion';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
@@ -32,6 +33,10 @@ const Users = () => {
     const [deleteUserModal, setDeleteUserModal] = useState(false);
     const selectedUserId = useRef(null);
     const [userName, setUserName] = useState('');
+    const [isAdminLoading, setIsAdminLoading] = useState(false);
+    const [isAddUserLoading, setIsAddUserLoading] = useState(false);
+    const [isResetUserLoading, setIsResetUserLoading] = useState(false);
+    const [isDeleteUserLoading, setIsDeleteUserLoading] = useState(false);
     
     const { user } = useSelector(state => state.user);
 
@@ -65,11 +70,13 @@ const Users = () => {
     }
 
     const onSwitchChange = async (userId) => {
+        setIsAdminLoading(true);
         const user = await toggleUserRole(userId)
         let usersCopy = [...users];
         const index = usersCopy.findIndex(element => element.id === user.id)
         usersCopy[index] = user;
         setUsers(usersCopy);
+        setIsAdminLoading(false);
     }
 
     const onResetUserClick = (userId) => {
@@ -78,12 +85,14 @@ const Users = () => {
     }
 
     const resetUser = async () => {
+        setIsResetUserLoading(true);
         const user = await resetPassword(selectedUserId.current);
         let usersCopy = [...users];
         const index = usersCopy.findIndex(element => element.id === user.id)
         usersCopy[index] = user;
         setUsers(usersCopy);
         setResetUserModal(false);
+        setIsResetUserLoading(false);
     }
 
     const onDeleteUserClick = (userId) => {
@@ -92,6 +101,7 @@ const Users = () => {
     }
 
     const _deleteUser = async () => {
+        setIsDeleteUserLoading(true);
         await deleteUser(selectedUserId.current);
         let usersCopy = [...users];
         usersCopy = usersCopy.filter((value) => {
@@ -99,6 +109,7 @@ const Users = () => {
         })
         setUsers(usersCopy);
         setDeleteUserModal(false);
+        setIsDeleteUserLoading(false);
     }
 
     const onViewDashboardClick = async (userId) => {
@@ -111,6 +122,7 @@ const Users = () => {
     }
 
     const onCreateUserClick = async () => {
+        setIsAddUserLoading(true);
         try {
             if (userName === '') {
                 setAddUserStatus({ error: true, errorMessage: 'Textfield is empty' });
@@ -126,6 +138,7 @@ const Users = () => {
                 setAddUserStatus({ error: true, errorMessage: 'Add User failed' });
             }
         }
+        setIsAddUserLoading(false);
     }
 
     return (
@@ -160,7 +173,8 @@ const Users = () => {
                                     <Typography color='#CCC'>User: </Typography>
                                     <Button variant="contained" color='error' startIcon={<DeleteIcon />} onClick={ () => onDeleteUserClick(user.id) }>Delete</Button>
                                 </div>
-                                <Button variant="outlined" style={{ width: '100%' }} onClick={ () => onViewDashboardClick(user.id) }>View Dashboard</Button>
+                                <Button variant="outlined" style={{ width: '100%' }} onClick={ () => onViewDashboardClick(user.id) }>View Dashboard</Button>       
+                                { isAdminLoading && <LinearProgress style={{ marginTop: '7px' }} /> }
                             </AccordionDetails>
                         </Accordion>
                     ))}
@@ -186,6 +200,7 @@ const Users = () => {
                             <Button color='error' variant='outlined' onClick={ onCreateUserCancleClick }>cancel</Button>
                             <Button variant='contained' onClick={ onCreateUserClick }>create</Button>
                         </div>
+                        { isAddUserLoading && <LinearProgress style={{ marginTop: '7px' }}/> }
                     </div>
                 </Modal>
                 <Modal
@@ -199,6 +214,7 @@ const Users = () => {
                             <Button color='error' variant='outlined' onClick={ () => setResetUserModal(false) }>cancel</Button>
                             <Button variant='contained' onClick={ resetUser }>reset</Button>
                         </div>
+                        { isResetUserLoading && <LinearProgress style={{ marginTop: '7px' }}/> }
                     </div>
                 </Modal>
                 <Modal
@@ -212,6 +228,7 @@ const Users = () => {
                             <Button color='error' variant='outlined' onClick={ () => setDeleteUserModal(false) }>cancel</Button>
                             <Button variant='contained' onClick={ _deleteUser }>delete</Button>
                         </div>
+                        { isDeleteUserLoading && <LinearProgress style={{ marginTop: '7px' }}/> }
                     </div>
                 </Modal>
             </div>

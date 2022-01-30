@@ -1,6 +1,7 @@
 .users {
     width: 100vw;
-    height: 100vh;
+    height: calc(100vh - 50px);
+    margin-top: 50px;
     background: #343434;
     display: flex;
     justify-content: center;
@@ -8,7 +9,7 @@
 }
 
 .users-table-wrapper {
-    height: 95vh;
+    height: calc(95vh - 50px);
     width: 90vw;
     background: #202020;
     border-radius: 10px;

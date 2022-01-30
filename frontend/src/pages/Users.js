@@ -21,6 +21,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
 import jwt_decode from 'jwt-decode';
 import { getUsers, toggleUserRole, resetPassword, deleteUser, addUser } from '../services/userService';
+import Header from './components/Header';
 import './Users.css'
 
 const Users = () => {
@@ -143,6 +144,7 @@ const Users = () => {
 
     return (
         <div className='users'>
+            <Header />
             { !users ? 
             <CircularProgress size={ 100 } /> :
             <div style={{ position: 'relative' }}>

@@ -10,6 +10,7 @@ import Users from './pages/Users';
 import Drinks from './pages/Drinks';
 import Overall from './pages/Overall';
 import Dashboard from './pages/Dashboard';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="users" element={ <AdminPage element={ <Users /> } /> } />
         <Route path="drinks" element={ <AdminPage element={ <Drinks /> } /> } />
         <Route path="overall" element={ <AdminPage element={ <Overall /> } /> } />
+        <Route path="*" element={ <NotFound /> }/>
       </Routes>
     </div>
   );

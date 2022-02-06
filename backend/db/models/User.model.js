@@ -57,6 +57,7 @@ module.exports = (sequelize) => {
         },
         money: {
             type: DataTypes.FLOAT,
+            allowNull: false,
             defaultValue: 0
         },
         active: {

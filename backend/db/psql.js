@@ -20,11 +20,14 @@ let db = { }
 
 db.sequelize = sequelize;
 db.User = require('./models/User.model')(sequelize);
-db.Drink = require('./models/Drink.model')(sequelize);
+db.DrinkCategory = require('./models/DrinkCategory.model')(sequelize)
+db.Drink = require('./models/Drink.model')(sequelize, db.DrinkCategory);
 db.UserDrinks = require('./models/UserDrinks.model')(sequelize, db.User, db.Drink);
 
 // Associations
-db.User.belongsToMany(db.Drink, { through: db.UserDrinks });
-db.Drink.belongsToMany(db.User, { through: db.UserDrinks });
+db.User.belongsToMany(db.Drink, { through: db.UserDrinks, onDelete: 'CASCADE' });
+db.Drink.belongsToMany(db.User, { through: db.UserDrinks, onDelete: 'SET NULL' });
+
+db.Drink.belongsTo(db.DrinkCategory, { onDelete: 'SET NULL', onUpdate: 'CASCADE'});
 
 module.exports = db;

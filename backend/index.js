@@ -22,11 +22,13 @@ db.sequelize.authenticate()
     .then(() => console.log('Connected to Database'))
     .catch(err => console.log('Database connect Error:', err));
 
-// db.sequelize.sync();
+// db.sequelize.sync({ force: true });
 
 // Routes
 app.use('/auth', require('./routes/auth.route'));
 app.use('/user', require('./routes/user.route'));
+app.use('/drinkCategory', require('./routes/drinkCategory.route'));
+app.use('/drink', require('./routes/drink.route'));
 
 const PORT = process.env.PORT || '8080'
 app.listen(PORT, console.log(`Server started on Port ${PORT}`))

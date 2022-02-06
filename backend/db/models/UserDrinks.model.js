@@ -10,13 +10,6 @@ module.exports = (sequelize, User, Drink) => {
             primaryKey: true,
             autoIncrement: true
         },
-        userId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: User,
-                key: 'id'
-            }
-        },
         creatorId: {
             type: DataTypes.INTEGER,
             references: {
@@ -24,13 +17,6 @@ module.exports = (sequelize, User, Drink) => {
                 key: 'id'
             },
             allowNull: false
-        },
-        drinkId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: Drink,
-                key: 'id'
-            }
         },
         amount: {
             type: DataTypes.INTEGER,

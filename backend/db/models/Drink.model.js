@@ -1,6 +1,6 @@
 const { DataTypes, Model } = require('sequelize');
 
-module.exports = (sequelize) => {
+module.exports = (sequelize, DrinkCategory) => {
 
     class Drink extends Model { }
 

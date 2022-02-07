@@ -1,5 +1,88 @@
 .drinks {
-    background-color: aquamarine;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #380049;
     height: calc(100vh - 50px);
     margin-top: 50px;
+}
+
+.drinks-tabs-wrapper {
+    background: 'black';
+    height: calc(95vh - 50px);
+    width: 90vw;
+    background: #202020;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.tabpanel {
+    background: rgb(27, 27, 27);
+    border-radius: 10px;
+    height: calc(100% - 50px);
+    margin-top: 2px;
+    padding: 6px;
+    overflow-y: scroll;
+}
+
+.drink-category-label {
+    background: orange;
+    padding: 1px 5px;
+    border-radius: 5px;
+    border: 1px solid black;
+}
+
+.add-drink-modal-box {
+    width: 95vw;
+    background: rgb(243, 243, 243);
+    border-radius: 10px;
+    padding: 30px;
+    transform: translate(0%, 50%);
+    margin-left: 2.5vw;
+}
+
+.update-drink-modal-box {
+    width: 95vw;
+    background: rgb(243, 243, 243);
+    border-radius: 10px;
+    padding: 30px;
+    transform: translate(0%, 50%);
+    margin-left: 2.5vw;
+}
+
+.delete-drink-modal-box {
+    width: 95vw;
+    background: rgb(243, 243, 243);
+    border-radius: 10px;
+    padding: 30px;
+    transform: translate(-0%, 150%);
+    margin-left: 2.5vw;
+}
+
+.add-drink-category-modal-box {
+    width: 95vw;
+    background: rgb(243, 243, 243);
+    border-radius: 10px;
+    padding: 30px;
+    transform: translate(0%, 50%);
+    margin-left: 2.5vw;
+}
+
+.update-drink-category-modal-box {
+    width: 95vw;
+    background: rgb(243, 243, 243);
+    border-radius: 10px;
+    padding: 30px;
+    transform: translate(0%, 50%);
+    margin-left: 2.5vw;
+}
+
+.delete-drink-category-modal-box {
+    width: 95vw;
+    background: rgb(243, 243, 243);
+    border-radius: 10px;
+    padding: 30px;
+    transform: translate(-0%, 150%);
+    margin-left: 2.5vw;
 }

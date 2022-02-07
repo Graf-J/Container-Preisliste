@@ -41,7 +41,6 @@ export async function addUser(userName) {
         const user = await axios.post(`${URL}/user`, { name: userName }, { withCredentials: true });
         return user.data;
     } catch (err) {
-        console.log(err);
         throw new Error('Add User failed');
     }
 }

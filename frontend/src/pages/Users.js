@@ -151,7 +151,7 @@ const Users = () => {
                 <div className='users-table-wrapper'>
                     { users.map(user => (
                         <Accordion key={ user.id } disabled={ userId === user.id }>
-                            <AccordionSummary expandIcon={ <ExpandMoreIcon /> } sx={{ backgroundColor: '#464646' }}>
+                            <AccordionSummary expandIcon={ <ExpandMoreIcon /> } sx={{ backgroundColor: '#282828' }}>
                                 <Typography color='white' style={{ width: '50%', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{ user.name }</Typography>
                                 <div className='user-icons-wrapper'>
                                     { user.role === 'admin' ? <StarsIcon color='primary' /> : <AccountCircleIcon color='warning' /> }

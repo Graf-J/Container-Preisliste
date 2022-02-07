@@ -31,7 +31,16 @@ module.exports.add = async (req, res) => {
             drinkCategoryId: req.body.drinkCategoryId
         })
 
-        res.status(200).json(drink);
+        const drinkWithCategory = await db.Drink.findOne({
+            where: { id: drink.id },
+            attributes: ['id', 'name', 'price'],
+            include: [{
+                model: db.DrinkCategory,
+                attributes: ['id', 'name']
+            }]
+        })
+
+        res.status(200).json(drinkWithCategory);
     } catch (err) {
         res.status(400).json({ error: err.message });
     }

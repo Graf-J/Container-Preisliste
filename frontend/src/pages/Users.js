@@ -19,6 +19,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import UndoIcon from '@mui/icons-material/Undo';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
+import CachedIcon from '@mui/icons-material/Cached';
 import jwt_decode from 'jwt-decode';
 import { getUsers, toggleUserRole, resetPassword, deleteUser, addUser } from '../services/userService';
 import Header from './components/Header';
@@ -70,6 +71,12 @@ const Users = () => {
         }
     }
 
+    const handleDrinksRefreshClick = async () => {
+		setUsers();
+		const users = await getUsers();
+		setUsers(users);
+	}
+
     const onSwitchChange = async (userId) => {
         setIsAdminLoading(true);
         const user = await toggleUserRole(userId)
@@ -119,6 +126,7 @@ const Users = () => {
 
     const onCreateUserCancleClick = async () => {
         setUserName('');
+        setAddUserStatus({ error: false, errorMessage: '' });
         setAddUserModal(false);
     }
 
@@ -145,44 +153,49 @@ const Users = () => {
     return (
         <div className='users'>
             <Header />
-            { !users ? 
-            <CircularProgress size={ 100 } /> :
             <div style={{ position: 'relative' }}>
                 <div className='users-table-wrapper'>
-                    { users.map(user => (
-                        <Accordion key={ user.id } disabled={ userId === user.id }>
-                            <AccordionSummary expandIcon={ <ExpandMoreIcon /> } sx={{ backgroundColor: '#282828' }}>
-                                <Typography color='white' style={{ width: '50%', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{ user.name }</Typography>
-                                <div className='user-icons-wrapper'>
-                                    { user.role === 'admin' ? <StarsIcon color='primary' /> : <AccountCircleIcon color='warning' /> }
-                                    { user.active ? <CheckCircleIcon color='success' /> : <CancelIcon color='error' /> }
-                                    <div style={ getMoneyStyle(user.money) }>
-                                        { user.money } €
+                    { !users ? 
+                    <CircularProgress size={ 100 } style={{ marginLeft: 'calc(50% - 50px)', marginTop: '100px' }} /> :
+                    <>
+                        { users.map(user => (
+                            <Accordion key={ user.id } disabled={ userId === user.id }>
+                                <AccordionSummary expandIcon={ <ExpandMoreIcon /> } sx={{ backgroundColor: '#282828' }}>
+                                    <Typography color='white' style={{ width: '50%', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{ user.name }</Typography>
+                                    <div className='user-icons-wrapper'>
+                                        { user.role === 'admin' ? <StarsIcon color='primary' /> : <AccountCircleIcon color='warning' /> }
+                                        { user.active ? <CheckCircleIcon color='success' /> : <CancelIcon color='error' /> }
+                                        <div style={ getMoneyStyle(user.money) }>
+                                            { user.money } €
+                                        </div>
                                     </div>
-                                </div>
-                            </AccordionSummary>
-                            <AccordionDetails sx={{ backgroundColor: '#383838' }}>
-                                <div className='user-settings'>
-                                    <Typography color='#CCC'>Admin: </Typography>
-                                    <Switch checked={ user.role === 'admin' ? true : false } onChange={ () => onSwitchChange(user.id) }/>
-                                </div>
-                                { user.active ?
-                                <div className='user-settings'>
-                                    <Typography color='#CCC'>Password: </Typography>
-                                    <Button variant="outlined" color='error' startIcon={<UndoIcon />} onClick={ () => onResetUserClick(user.id) }>Reset</Button>
-                                </div> : null }
-                                <div className="user-settings">
-                                    <Typography color='#CCC'>User: </Typography>
-                                    <Button variant="contained" color='error' startIcon={<DeleteIcon />} onClick={ () => onDeleteUserClick(user.id) }>Delete</Button>
-                                </div>
-                                <Button variant="outlined" style={{ width: '100%' }} onClick={ () => onViewDashboardClick(user.id) }>View Dashboard</Button>       
-                                { isAdminLoading && <LinearProgress style={{ marginTop: '7px' }} /> }
-                            </AccordionDetails>
-                        </Accordion>
-                    ))}
+                                </AccordionSummary>
+                                <AccordionDetails sx={{ backgroundColor: '#383838' }}>
+                                    <div className='user-settings'>
+                                        <Typography color='#CCC'>Admin: </Typography>
+                                        <Switch checked={ user.role === 'admin' ? true : false } onChange={ () => onSwitchChange(user.id) }/>
+                                    </div>
+                                    { user.active ?
+                                    <div className='user-settings'>
+                                        <Typography color='#CCC'>Password: </Typography>
+                                        <Button variant="outlined" color='error' startIcon={<UndoIcon />} onClick={ () => onResetUserClick(user.id) }>Reset</Button>
+                                    </div> : null }
+                                    <div className="user-settings">
+                                        <Typography color='#CCC'>User: </Typography>
+                                        <Button variant="contained" color='error' startIcon={<DeleteIcon />} onClick={ () => onDeleteUserClick(user.id) }>Delete</Button>
+                                    </div>
+                                    <Button variant="outlined" style={{ width: '100%' }} onClick={ () => onViewDashboardClick(user.id) }>View Dashboard</Button>       
+                                    { isAdminLoading && <LinearProgress style={{ marginTop: '7px' }} /> }
+                                </AccordionDetails>
+                            </Accordion>
+                        ))}
+                    </> }
                 </div>
-                <IconButton color="primary" size='large' style={{ position: 'absolute', bottom: 0, right: 10 }} onClick={ () => setAddUserModal(true) }>
+                <IconButton color="primary" size='large' style={{ position: 'absolute', bottom: 3, right: 13 }} onClick={ () => setAddUserModal(true) }>
                     <AddIcon fontSize='large'/>
+                </IconButton>
+                <IconButton color="primary" size='large' style={{ position: 'absolute', bottom: 3, left: 13 }} onClick={ handleDrinksRefreshClick }>
+                    <CachedIcon fontSize='large'/>
                 </IconButton>
                 <Modal
                     open={ addUserModal }
@@ -234,7 +247,6 @@ const Users = () => {
                     </div>
                 </Modal>
             </div>
-            }
         </div>
     )
 }

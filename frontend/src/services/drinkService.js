@@ -20,7 +20,6 @@ export async function addDrink(drink) {
 }
 
 export async function updateDrink(drinkId, drink) {
-    console.log(drink);
     try {
         const newDrink = await axios.put(`${URL}/drink/${drinkId}`, { name: drink.name, price: drink.price, drinkCategoryId: drink.drinkCategoryId }, { withCredentials: true });
         return newDrink.data;

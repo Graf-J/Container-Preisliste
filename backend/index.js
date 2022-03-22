@@ -29,6 +29,7 @@ app.use('/auth', require('./routes/auth.route'));
 app.use('/user', require('./routes/user.route'));
 app.use('/drinkCategory', require('./routes/drinkCategory.route'));
 app.use('/drink', require('./routes/drink.route'));
+app.use('/payment', require('./routes/payment.route'));
 
 const PORT = process.env.PORT || '8080'
 app.listen(PORT, console.log(`Server started on Port ${PORT}`))

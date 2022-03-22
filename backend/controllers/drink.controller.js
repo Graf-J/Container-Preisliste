@@ -92,7 +92,7 @@ module.exports.delete = async (req, res) => {
         const drink = await db.Drink.findOne({ where: { id: req.params.id }})
         
         if (!drink) {
-            throw new Error('User not found');
+            throw new Error('Drink not found');
         }
 
         await drink.destroy();

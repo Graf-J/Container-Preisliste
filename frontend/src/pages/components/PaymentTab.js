@@ -42,6 +42,7 @@ const PaymentTab = () => {
     const [drinks, setDrinks] = useState([]);
     const [drinkId, setDrinkId] = useState();
     const [drinkAmount, setDrinkAmount] = useState(1);
+    const [totalPrice, setTotalPrice] = useState(0);
     const [isPlusDisabled, setIsPlusDisabled] = useState(true);
     const [isMinusDisabled, setIsMinusDisabled] = useState(true);
 
@@ -129,8 +130,11 @@ const PaymentTab = () => {
             setDrinkId(value.id);
             setIsPlusDisabled(false);
             if (drinkAmount > 1) setIsMinusDisabled(false);
+            const selectedDrink = drinks.filter(drink => drink.id === value.id);
+            setTotalPrice(Math.round(drinkAmount * selectedDrink[0].price * 100) / 100);
         } else {
             setDrinkId(null);
+            setTotalPrice(0);
             setIsPlusDisabled(true);
             setIsMinusDisabled(true);
         }
@@ -138,12 +142,18 @@ const PaymentTab = () => {
 
     const handlePlusClick = () => {
         setIsMinusDisabled(false);
-        setDrinkAmount(drinkAmount + 1);
+        const newAmount = drinkAmount + 1
+        setDrinkAmount(newAmount);
+        const selectedDrink = drinks.filter(drink => drink.id === drinkId);
+        setTotalPrice(Math.round(newAmount * selectedDrink[0].price * 100) / 100);
     }
 
     const handleMinusClick = () => {
         if (drinkAmount <= 2) setIsMinusDisabled(true);
-        setDrinkAmount(drinkAmount - 1);
+        const newAmount = drinkAmount - 1;
+        setDrinkAmount(newAmount);
+        const selectedDrink = drinks.filter(drink => drink.id === drinkId);
+        setTotalPrice(Math.round(newAmount * selectedDrink[0].price * 100) / 100)
     }
 
     const onAddPaymentModalClose = () => {
@@ -152,6 +162,7 @@ const PaymentTab = () => {
         setIsPlusDisabled(true);
         setIsMinusDisabled(true);
         setIsAddPaymentModalOpen(false);
+        setTotalPrice(0);
     }
 
     const handleCreatePaymentClick = async () => {
@@ -261,6 +272,7 @@ const PaymentTab = () => {
                             <AddIcon fontSize='large'/>
                         </IconButton>
                     </div>
+                    <Typography fontSize={ 25 } style={{ marginTop: '20px' }}>Total Price: { totalPrice } €</Typography>
 					<div className='modal-button-wrapper'>
 						<Button color='error' variant='outlined' onClick={ onAddPaymentModalClose }>cancel</Button>
 						<Button disabled={ isPlusDisabled } variant='contained' onClick={ handleCreatePaymentClick }>create</Button>

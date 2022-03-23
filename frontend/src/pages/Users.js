@@ -57,16 +57,14 @@ const Users = () => {
     const getMoneyStyle = (money) => {
         let color = ''
         if (money < 0) {
-            color = 'red';
-        } else if (money > 0) {
-            color = 'green';
+            color = '#eb4034';
         } else {
-            color = 'grey';
+            color = '#34eb5f';
         }
 
         return {
             background: color,
-            padding: '0 10px',
+            padding: '0 5px',
             borderRadius: '5px'
         }
     }
@@ -161,12 +159,12 @@ const Users = () => {
                         { users.map(user => (
                             <Accordion key={ user.id } disabled={ userId === user.id }>
                                 <AccordionSummary expandIcon={ <ExpandMoreIcon /> } sx={{ backgroundColor: '#282828' }}>
-                                    <Typography color='white' style={{ width: '50%', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{ user.name }</Typography>
+                                    <Typography color='white' style={{ width: '40%', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{ user.name }</Typography>
                                     <div className='user-icons-wrapper'>
                                         { user.role === 'admin' ? <StarsIcon color='primary' /> : <AccountCircleIcon color='warning' /> }
                                         { user.active ? <CheckCircleIcon color='success' /> : <CancelIcon color='error' /> }
                                         <div style={ getMoneyStyle(user.money) }>
-                                            { user.money } €
+                                            { Math.round(user.money * 100) / 100 } €
                                         </div>
                                     </div>
                                 </AccordionSummary>
@@ -238,7 +236,7 @@ const Users = () => {
                     className='delete-user-modal'
                 >
                     <div className='delete-user-modal-box'>
-                        <Typography fontSize={ 20 } style={{ marginBottom: '20px' }} color='black'>Are you sure you want to delete the selected user?</Typography>
+                        <Typography fontSize={ 20 } style={{ marginBottom: '20px' }} color='black'>Are you sure you want to delete the selected user? All Payments of this User will be gone afterwards!</Typography>
                         <div className='modal-button-wrapper'>
                             <Button color='error' variant='outlined' onClick={ () => setDeleteUserModal(false) }>cancel</Button>
                             <Button variant='contained' onClick={ _deleteUser }>delete</Button>

@@ -519,7 +519,7 @@ const Drinks = () => {
                     className='delete-drink-modal'
 			>
 				<div className='delete-drink-modal-box'>
-					<Typography fontSize={ 20 } style={{ marginBottom: '20px' }} color='black'>Are you sure you want to delete the drink { selectedDrink.current && selectedDrink.current.name }?</Typography>
+					<Typography fontSize={ 20 } style={{ marginBottom: '20px' }} color='black'>Are you sure you want to delete the drink { selectedDrink.current && selectedDrink.current.name }? All Payments which contain this Drink will be gone, but the Money of the Users will be unaffected!</Typography>
 					<div className='modal-button-wrapper'>
 						<Button color='error' variant='outlined' onClick={ () => setDeleteDrinkModalOpen(false) }>cancel</Button>
 						<Button variant='contained' onClick={ onDeleteDrinkClick }>delete</Button>

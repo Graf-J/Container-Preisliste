@@ -38,6 +38,7 @@
     background: rgb(243, 243, 243);
     border-radius: 10px;
     padding: 30px;
+    margin-top: -80px;
     transform: translate(0%, 50%);
     margin-left: 2.5vw;
 }
@@ -47,6 +48,7 @@
     background: rgb(243, 243, 243);
     border-radius: 10px;
     padding: 30px;
+    margin-top: -80px;
     transform: translate(0%, 50%);
     margin-left: 2.5vw;
 }
@@ -56,6 +58,7 @@
     background: rgb(243, 243, 243);
     border-radius: 10px;
     padding: 30px;
+    margin-top: -320px;
     transform: translate(-0%, 150%);
     margin-left: 2.5vw;
 }
@@ -83,6 +86,7 @@
     background: rgb(243, 243, 243);
     border-radius: 10px;
     padding: 30px;
+    margin-top: -80px;
     transform: translate(-0%, 150%);
     margin-left: 2.5vw;
 }

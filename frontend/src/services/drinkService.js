@@ -10,9 +10,18 @@ export async function getDrinks() {
     }
 }
 
+export async function getPopularDrinks() {
+    try {
+        const drinks = await axios.get(`${URL}/drink/popular`, { withCredentials: true });
+        return drinks.data;
+    } catch (err) {
+        throw new Error('GET Drinks failed');
+    }
+}
+
 export async function addDrink(drink) {
     try {
-        const newDrink = await axios.post(`${URL}/drink`, { name: drink.name, price: drink.price, drinkCategoryId: drink.drinkCategoryId }, { withCredentials: true });
+        const newDrink = await axios.post(`${URL}/drink`, { name: drink.name, price: drink.price, categoryId: drink.categoryId }, { withCredentials: true });
         return newDrink.data;
     } catch (err) {
         throw new Error('Add Drink failed');
@@ -21,7 +30,7 @@ export async function addDrink(drink) {
 
 export async function updateDrink(drinkId, drink) {
     try {
-        const newDrink = await axios.put(`${URL}/drink/${drinkId}`, { name: drink.name, price: drink.price, drinkCategoryId: drink.drinkCategoryId }, { withCredentials: true });
+        const newDrink = await axios.put(`${URL}/drink/${drinkId}`, { name: drink.name, price: drink.price, categoryId: drink.categoryId }, { withCredentials: true });
         return newDrink.data;
     } catch (err) {
         throw new Error('Update Drink failed');

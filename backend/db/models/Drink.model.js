@@ -13,6 +13,10 @@ module.exports = (sequelize, DrinkCategory) => {
         price: {
             type: DataTypes.FLOAT,
             allowNull: false
+        },
+        categoryId: {
+            type: DataTypes.INTEGER,
+            field: 'category_id'
         }
     }, {
         sequelize,

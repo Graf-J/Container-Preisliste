@@ -17,7 +17,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Header from './components/Header';
 import { getDrinks, addDrink, updateDrink, deleteDrink } from '../services/drinkService';
-import { getDrinkCategories, addDrinkCategory, updateDrinkCategory, deleteDrinkCategory } from '../services/drinkCategoryService';
+import { getCategories, addCategory, updateCategory, deleteCategory } from '../services/categoryService';
 import './Drinks.css';
 
 const Drinks = () => {
@@ -32,22 +32,22 @@ const Drinks = () => {
 
 	const [deleteDrinkModalOpen, setDeleteDrinkModalOpen] = useState(false);
 	const [isDeleteDrinkLoading, setIsDeleteDrinkLoading] = useState(false);
-	const [deleteDrinkCategoryModalOpen, setDeleteDrinkCategoryModalOpen] = useState(false)
-	const [isDeleteDrinkCategoryLoading, setIsDeleteDrinkCategoryLoading] = useState(false);
+	const [deleteCategoryModalOpen, setdeleteCategoryModalOpen] = useState(false)
+	const [isdeleteCategoryLoading, setIsdeleteCategoryLoading] = useState(false);
 	
 	const [addDrinkModalOpen, setAddDrinkModalOpen] = useState(false);
 	const [isAddDrinkLoading, setIsAddDrinkLoading] = useState(false);
-	const [addDrinkCategoryModalOpen, setAddDrinkCategoryModalOpen] = useState(false)
-	const [isAddDrinkCategoryLoading, setIsAddDrinkCategoryLoading] = useState(false);
+	const [addCategoryModalOpen, setaddCategoryModalOpen] = useState(false)
+	const [isaddCategoryLoading, setIsaddCategoryLoading] = useState(false);
 	
 	const [updateDrinkModalOpen, setUpdateDrinkModalOpen] = useState(false);
 	const [isUpdateDrinkLoading, setIsUpdateDrinkLoading] = useState(false);
-	const [updateDrinkCategoryModalOpen, setUpdateDrinkCategoryModalOpen] = useState(false)
-	const [isUpdateDrinkCategoryLoading, setIsUpdateDrinkCategoryLoading] = useState(false);
+	const [updateCategoryModalOpen, setupdateCategoryModalOpen] = useState(false)
+	const [isupdateCategoryLoading, setIsupdateCategoryLoading] = useState(false);
 
 	const [drinkName, setDrinkName] = useState();
 	const [drinkPrice, setDrinkPrice] = useState();
-	const [drinkCategoryId, setDrinkCategoryId] = useState();
+	const [categoryId, setCategoryId] = useState();
 	const [drinkCategoryName, setDrinkCategoryName] = useState();
 	
 	const [addDrinkStatus, setAddDrinkStatus] = useState({ 
@@ -60,10 +60,10 @@ const Drinks = () => {
 		price: { error: false, message: '' },
 		category: { error: false, message: '' }
 	})
-	const [addDrinkCategoryStatus, setAddDrinkCategoryStatus] = useState({
+	const [addCategoryStatus, setaddCategoryStatus] = useState({
 		name: { error: false, message: '' }
 	})
-	const [updateDrinkCategoryStatus, setUpdateDrinkCategoryStatus] = useState({
+	const [updateCategoryStatus, setupdateCategoryStatus] = useState({
 		name: { error: false, message: '' }
 	})
 
@@ -73,13 +73,13 @@ const Drinks = () => {
             setDrinks(data);
         }
 
-		async function getDrinkCategoriesData() {
-			const data = await getDrinkCategories();
+		async function getCategoriesData() {
+			const data = await getCategories();
 			setDrinkCategories(data);
 		}
 
         getDrinksData();
-		getDrinkCategoriesData();
+		getCategoriesData();
 	}, [])
 
 	const getLabeledCategories = () => {
@@ -98,7 +98,7 @@ const Drinks = () => {
 
 	const handleDrinkCategoriesRefreshClick = async () => {
 		setDrinkCategories();
-		const drinkCategories = await getDrinkCategories();
+		const drinkCategories = await getCategories();
 		setDrinkCategories(drinkCategories);
 	}
 
@@ -111,7 +111,7 @@ const Drinks = () => {
 		selectedDrink.current = drink;
 		setDrinkName(drink.name);
 		setDrinkPrice(drink.price);
-		setDrinkCategoryId(null);
+		setCategoryId(null);
 		setDrinkCategoryName(null);
 		setUpdateDrinkModalOpen(true);
 	}
@@ -158,12 +158,12 @@ const Drinks = () => {
 				throw new Error('Required Field is missing');
 			}
 
-			const drink = await addDrink({ name: drinkName, price: drinkPrice, drinkCategoryId: drinkCategoryId });
+			const drink = await addDrink({ name: drinkName, price: drinkPrice, categoryId: categoryId });
 			setDrinks([drink, ...drinks]);
 	
 			setDrinkName(null);
 			setDrinkPrice(null);
-			setDrinkCategoryId(null);
+			setCategoryId(null);
 	
 			closeAddDrinkModal();
 		} catch (err) {
@@ -189,10 +189,10 @@ const Drinks = () => {
 
 	const handleAutocompleteChange = (value) => {
 		if (value) {
-			setDrinkCategoryId(value.id);
+			setCategoryId(value.id);
 			setDrinkCategoryName(value.label);
 		} else {
-			setDrinkCategoryId(null);
+			setCategoryId(null);
 			setDrinkCategoryName(null);
 		}
 	}
@@ -216,7 +216,7 @@ const Drinks = () => {
 				throw new Error('Required Field is missing');
 			}
 
-			const drink = await updateDrink(selectedDrink.current.id, { name: drinkName, price: drinkPrice, drinkCategoryId: drinkCategoryId });
+			const drink = await updateDrink(selectedDrink.current.id, { name: drinkName, price: drinkPrice, categoryId: categoryId });
 			let drinksCopy = [...drinks];
 			const index = drinksCopy.findIndex(element => element.id === drink.id);
 			drinksCopy[index] = drink;
@@ -224,7 +224,7 @@ const Drinks = () => {
 	
 			setDrinkName(null);
 			setDrinkPrice(null);
-			setDrinkCategoryId(null);
+			setCategoryId(null);
 	
 			closeUpdateDrinkModal();
 		} catch (err) {
@@ -239,88 +239,88 @@ const Drinks = () => {
 		setIsUpdateDrinkLoading(false);
 	}
 
-	const handleDeleteDrinkCategoryClick = (drinkCategory) => {
+	const handledeleteCategoryClick = (drinkCategory) => {
 		selectedDrinkCategory.current = drinkCategory;
-		setDeleteDrinkCategoryModalOpen(true);
+		setdeleteCategoryModalOpen(true);
 	}
 
-	const handleUpdateDrinkCategoryClick = (drinkCategory) => {
+	const handleupdateCategoryClick = (drinkCategory) => {
 		selectedDrinkCategory.current = drinkCategory;
-		setDrinkCategoryId(drinkCategory.id)
+		setCategoryId(drinkCategory.id)
 		setDrinkCategoryName(drinkCategory.name);
-		setUpdateDrinkCategoryModalOpen(true);
+		setupdateCategoryModalOpen(true);
 	}
 
-	const closeAddDrinkCategoryModal = () => {
-		setAddDrinkCategoryModalOpen(false);
-		setAddDrinkCategoryStatus ({
+	const closeaddCategoryModal = () => {
+		setaddCategoryModalOpen(false);
+		setaddCategoryStatus ({
 			name: { error: false, message: '' }
 		});
 	}
 
-	const onAddDrinkCategoryClick = async () => {
-		setIsAddDrinkCategoryLoading(true);
+	const onaddCategoryClick = async () => {
+		setIsaddCategoryLoading(true);
 		try {
 			if (!drinkCategoryName) {
-				setAddDrinkCategoryStatus({
+				setaddCategoryStatus({
 					name: { error: true, message: 'Name is required' }
 				});
 				throw new Error('Required Field is missing');
 			}
 
-			const drinkCategory = await addDrinkCategory({ name: drinkCategoryName });
+			const drinkCategory = await addCategory({ name: drinkCategoryName });
 			setDrinkCategories([drinkCategory, ...drinkCategories]);
 	
-			setDrinkCategoryId(null);
+			setCategoryId(null);
 			setDrinkCategoryName(null);
 	
-			closeAddDrinkCategoryModal();
+			closeaddCategoryModal();
 		} catch (err) {
 			if (!(err.message === 'Required Field is missing')) {
-				setAddDrinkCategoryStatus({
+				setaddCategoryStatus({
 					name: { error: true, message: '' }
 				});
 			}
 		}
-		setIsAddDrinkCategoryLoading(false);
+		setIsaddCategoryLoading(false);
 	}
 
-	const closeUpdateDrinkCategoryModal = () => {
-		setUpdateDrinkCategoryModalOpen(false);
-		setUpdateDrinkCategoryStatus({
+	const closeupdateCategoryModal = () => {
+		setupdateCategoryModalOpen(false);
+		setupdateCategoryStatus({
 			name: { error: false, message: '' }
 		});
 	}
 
-	const onUpdateDrinkCategoryClick = async () => {
-		setIsUpdateDrinkCategoryLoading(true);
+	const onupdateCategoryClick = async () => {
+		setIsupdateCategoryLoading(true);
 		try {
 			if (!drinkCategoryName) {
-				setUpdateDrinkCategoryStatus({
+				setupdateCategoryStatus({
 					name: { error: true, message: 'Name is required' }
 				});
 				throw new Error('Required Field is missing');
 			}
 
-			const drinkCategory = await updateDrinkCategory(selectedDrinkCategory.current.id, { name: drinkCategoryName });
+			const drinkCategory = await updateCategory(selectedDrinkCategory.current.id, { name: drinkCategoryName });
 			let drinkCategoriesCopy = [...drinkCategories];
 			const index = drinkCategoriesCopy.findIndex(element => element.id === drinkCategory.id);
 			drinkCategoriesCopy[index] = drinkCategory;
 			setDrinkCategories(drinkCategoriesCopy);
 			updateDrinkCategoriesOnUpdate(drinkCategory);
 	
-			setDrinkCategoryId(null);
+			setCategoryId(null);
 			setDrinkCategoryName(null);
 	
-			closeUpdateDrinkCategoryModal();
+			closeupdateCategoryModal();
 		} catch (err) {
 			if (!(err.message === 'Required Field is missing')) {
-				setUpdateDrinkCategoryStatus({
+				setupdateCategoryStatus({
 					name: { error: true, message: '' }
 				});
 			}
 		}
-		setIsUpdateDrinkCategoryLoading(false);
+		setIsupdateCategoryLoading(false);
 	}
 
 	const updateDrinkCategoriesOnUpdate = (newDrinkCategory) => {
@@ -335,10 +335,10 @@ const Drinks = () => {
 		setDrinks(drinksCopy);
 	}
 
-	const onDeleteDrinkCategoryClick = async () => {
-		setIsDeleteDrinkCategoryLoading(true);
+	const ondeleteCategoryClick = async () => {
+		setIsdeleteCategoryLoading(true);
 
-		await deleteDrinkCategory(selectedDrinkCategory.current.id);
+		await deleteCategory(selectedDrinkCategory.current.id);
 		let drinkCategoriesCopy = [...drinkCategories];
         drinkCategoriesCopy = drinkCategoriesCopy.filter((value) => {
             return value.id !== selectedDrinkCategory.current.id;
@@ -346,8 +346,8 @@ const Drinks = () => {
         setDrinkCategories(drinkCategoriesCopy);
 		deleteDrinkCategoriesOnDelete(selectedDrinkCategory.current);
 
-        setDeleteDrinkCategoryModalOpen(false);
-		setIsDeleteDrinkCategoryLoading(false);
+        setdeleteCategoryModalOpen(false);
+		setIsdeleteCategoryLoading(false);
 	}
 
 	const deleteDrinkCategoriesOnDelete = (deletedDrinkCategory) => {
@@ -379,19 +379,19 @@ const Drinks = () => {
 								<Accordion key={ drink.id }>
 									<AccordionSummary expandIcon={ <ExpandMoreIcon /> } sx={{ backgroundColor: '#282828' }}>
 										<Typography color='white' style={{ width: '60%', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{ drink.name }</Typography>
-										{ drink.drinkCategory && 
+										{ drink.category && 
 										<div className='drink-category-label'>
-											<Typography>{ drink.drinkCategory.name }</Typography>
+											<Typography>{ drink.category.name }</Typography>
 										</div> }
 									</AccordionSummary>
 									<AccordionDetails sx={{ backgroundColor: '#383838' }} style={{display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
 										<div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', marginBottom: '5px', marginTop: '10px' }}>
 											<Typography color='#CCC'>Price:</Typography>
-											<Typography color='#CCC'><b>{ drink.price.toFixed(2) } €</b></Typography>
+											<Typography color='#CCC'><b>{ drink.price } €</b></Typography>
 										</div>
-										{ drink.drinkCategory && <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between'}}>
+										{ drink.category && <div style={{ width: '100%', display: 'flex', justifyContent: 'space-between'}}>
 											<Typography color='#CCC'>Category:</Typography>
-											<Typography color='#CCC'><b>{ drink.drinkCategory.name }</b></Typography>
+											<Typography color='#CCC'><b>{ drink.category.name }</b></Typography>
 										</div> }
 										<div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
 											<Button variant="outlined" color="secondary" onClick={ () => handleUpdateDrinkClick(drink) }>Update</Button>
@@ -421,14 +421,14 @@ const Drinks = () => {
 									</AccordionSummary>
 									<AccordionDetails sx={{ backgroundColor: '#383838' }} style={{display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
 										<div style={{ width: '100%', display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-											<Button variant="outlined" color="secondary" onClick={ () => handleUpdateDrinkCategoryClick(drinkCategory) }>Update</Button>
-											<Button variant="contained" color="error" onClick={ () => handleDeleteDrinkCategoryClick(drinkCategory) }>Delete</Button>
+											<Button variant="outlined" color="secondary" onClick={ () => handleupdateCategoryClick(drinkCategory) }>Update</Button>
+											<Button variant="contained" color="error" onClick={ () => handledeleteCategoryClick(drinkCategory) }>Delete</Button>
 										</div>
 									</AccordionDetails>
 								</Accordion>
 							))}
 						</div> }
-						<IconButton color="primary" size='large' style={{ position: 'absolute', bottom: '4%', right: '9%' }} onClick={ () => setAddDrinkCategoryModalOpen(true) }>
+						<IconButton color="primary" size='large' style={{ position: 'absolute', bottom: '4%', right: '9%' }} onClick={ () => setaddCategoryModalOpen(true) }>
 							<AddIcon fontSize='large'/>
 						</IconButton>
 						<IconButton color="primary" size='large' style={{ position: 'absolute', bottom: '4%', left: '9%' }} onClick={ handleDrinkCategoriesRefreshClick }>
@@ -464,7 +464,7 @@ const Drinks = () => {
 						options={ getLabeledCategories() }
 						sx={{ width: '100%' }}
 						isOptionEqualToValue={(option, value) => option.id === value.id}
-						onChange={ (_, value) => value ? setDrinkCategoryId(value.id) : setDrinkCategoryId(null) }
+						onChange={ (_, value) => value ? setCategoryId(value.id) : setCategoryId(null) }
 						renderInput={ params => <TextField error={ addDrinkStatus.category.error } {...params} label='Category'/>}
 					/> }
 					<div className='modal-button-wrapper'>
@@ -528,8 +528,8 @@ const Drinks = () => {
 				</div>
 			</Modal>
 			<Modal
-                    open={ addDrinkCategoryModalOpen }
-                    onClose={ closeAddDrinkCategoryModal }
+                    open={ addCategoryModalOpen }
+                    onClose={ closeaddCategoryModal }
                     className='add-drink-category-modal'
 			>
 				<div className='add-drink-category-modal-box'>
@@ -537,20 +537,20 @@ const Drinks = () => {
 					<TextField
 						onChange={ e => setDrinkCategoryName(e.target.value) }
 						style={{ width: '100%', marginBottom: '15px' }}
-						error={ addDrinkCategoryStatus.name.error }
+						error={ addCategoryStatus.name.error }
 						label="Name"
-						helperText={ addDrinkCategoryStatus.name.message }
+						helperText={ addCategoryStatus.name.message }
 					/>
 					<div className='modal-button-wrapper'>
-						<Button color='error' variant='outlined' onClick={ closeAddDrinkCategoryModal }>cancel</Button>
-						<Button variant='contained' onClick={ onAddDrinkCategoryClick }>create</Button>
+						<Button color='error' variant='outlined' onClick={ closeaddCategoryModal }>cancel</Button>
+						<Button variant='contained' onClick={ onaddCategoryClick }>create</Button>
 					</div>
-					{ isAddDrinkCategoryLoading && <LinearProgress style={{ marginTop: '7px' }}/> }
+					{ isaddCategoryLoading && <LinearProgress style={{ marginTop: '7px' }}/> }
 				</div>
 			</Modal>
 			<Modal
-                    open={ updateDrinkCategoryModalOpen }
-                    onClose={ closeUpdateDrinkCategoryModal }
+                    open={ updateCategoryModalOpen }
+                    onClose={ closeupdateCategoryModal }
                     className='update-drink-category-modal'
 			>
 				<div className='update-drink-category-modal-box'>
@@ -559,29 +559,29 @@ const Drinks = () => {
 						value={ drinkCategoryName ? drinkCategoryName : '' }
 						onChange={ e => setDrinkCategoryName(e.target.value) }
 						style={{ width: '100%', marginBottom: '15px' }}
-						error={ updateDrinkCategoryStatus.name.error }
+						error={ updateCategoryStatus.name.error }
 						label="Name"
-						helperText={ updateDrinkCategoryStatus.name.message }
+						helperText={ updateCategoryStatus.name.message }
 					/>
 					<div className='modal-button-wrapper'>
-						<Button color='error' variant='outlined' onClick={ closeUpdateDrinkCategoryModal }>cancel</Button>
-						<Button variant='contained' onClick={ onUpdateDrinkCategoryClick }>update</Button>
+						<Button color='error' variant='outlined' onClick={ closeupdateCategoryModal }>cancel</Button>
+						<Button variant='contained' onClick={ onupdateCategoryClick }>update</Button>
 					</div>
-					{ isUpdateDrinkCategoryLoading && <LinearProgress style={{ marginTop: '7px' }}/> }
+					{ isupdateCategoryLoading && <LinearProgress style={{ marginTop: '7px' }}/> }
 				</div>
 			</Modal>
 			<Modal
-                    open={ deleteDrinkCategoryModalOpen }
-                    onClose={ () => setDeleteDrinkCategoryModalOpen(false) }
+                    open={ deleteCategoryModalOpen }
+                    onClose={ () => setdeleteCategoryModalOpen(false) }
                     className='delete-drink-category-modal'
 			>
 				<div className='delete-drink-category-modal-box'>
 					<Typography fontSize={ 20 } style={{ marginBottom: '20px' }} color='black'>Are you sure you want to delete the category { selectedDrinkCategory.current && selectedDrinkCategory.current.name }?</Typography>
 					<div className='modal-button-wrapper'>
-						<Button color='error' variant='outlined' onClick={ () => setDeleteDrinkCategoryModalOpen(false) }>cancel</Button>
-						<Button variant='contained' onClick={ onDeleteDrinkCategoryClick }>delete</Button>
+						<Button color='error' variant='outlined' onClick={ () => setdeleteCategoryModalOpen(false) }>cancel</Button>
+						<Button variant='contained' onClick={ ondeleteCategoryClick }>delete</Button>
 					</div>
-					{ isDeleteDrinkCategoryLoading && <LinearProgress style={{ marginTop: '7px' }}/> }
+					{ isdeleteCategoryLoading && <LinearProgress style={{ marginTop: '7px' }}/> }
 				</div>
 			</Modal>
 		</div>

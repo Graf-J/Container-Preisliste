@@ -27,7 +27,7 @@ db.sequelize.authenticate()
 // Routes
 app.use('/auth', require('./routes/auth.route'));
 app.use('/user', require('./routes/user.route'));
-app.use('/drinkCategory', require('./routes/drinkCategory.route'));
+app.use('/category', require('./routes/category.route'));
 app.use('/drink', require('./routes/drink.route'));
 app.use('/payment', require('./routes/payment.route'));
 

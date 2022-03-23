@@ -1,4 +1,4 @@
-const { QueryTypes } = require('sequelize')
+const { QueryTypes } = require('sequelize');
 const db = require('../db/psql');
 
 module.exports.get = async (req, res) => {
@@ -11,7 +11,7 @@ module.exports.get = async (req, res) => {
 
         const offset = (stepsize * page) - stepsize;
 
-        const result = await db.sequelize.query(`SELECT ud.id, ud.amount, ud.created_at, u.name as user, c.name as creator, d.name as drink, d.price as price, ud.amount * d.price as sumprice FROM user_drinks AS ud INNER JOIN users as u ON ud.user_id = u.id INNER JOIN users as c ON ud.creator_id = c.id INNER JOIN drinks as d ON ud.drink_id = d.id WHERE ud.user_id = ${ req.userId } ORDER BY ud.created_at DESC LIMIT ${ stepsize } OFFSET ${ offset };`, { type: QueryTypes.SELECT });
+        const result = await db.sequelize.query(`SELECT ud.id, ud.amount, ud.created_at, c.name as creator, d.name as drink, cat.name as category, d.price as price, ud.amount * d.price as sumprice FROM user_drinks AS ud INNER JOIN users as u ON ud.user_id = u.id INNER JOIN users as c ON ud.creator_id = c.id INNER JOIN drinks as d ON ud.drink_id = d.id LEFT JOIN categories as cat ON d.category_id = cat.id WHERE ud.user_id = ${ req.userId } ORDER BY ud.created_at DESC LIMIT ${ stepsize } OFFSET ${ offset };`, { type: QueryTypes.SELECT });
 
         res.status(200).json(result);
     } catch (err) {
@@ -38,14 +38,23 @@ module.exports.add = async (req, res) => {
             throw new Error('Request not complete');
         }
 
-        const payment = await db.UserDrinks.create({
-            creatorId: req.userId,
-            amount: req.body.amount,
-            userId: req.body.userId,
-            drinkId: req.body.drinkId
+        const updatedMoney = await db.sequelize.transaction(async t => {
+            await db.UserDrinks.create({
+                creatorId: req.userId,
+                amount: req.body.amount,
+                userId: req.body.userId,
+                drinkId: req.body.drinkId
+            }, { transaction: t });
+
+            const drink = await db.Drink.findOne({ where: { id: req.body.drinkId }}, { transaction: t });
+
+            const user = await db.User.findOne({ where: { id: req.body.userId }}, { transaction: t });
+            const updatedUser = await user.decrement('money', { by: (req.body.amount * drink.price)}, { transaction: t });
+
+            return updatedUser.money;
         })
 
-        res.status(200).json(payment);
+        res.status(200).json({ money: updatedMoney });
     } catch (err) {
         res.sendStatus(400);
     }
@@ -53,16 +62,23 @@ module.exports.add = async (req, res) => {
 
 module.exports.delete = async (req, res) => {
     try {
-        const payment = await db.UserDrinks.findOne({ where: { id: req.params.id }})
-        
-        if (!payment) {
-            throw new Error('Payment not found');
-        }
+        const updatedMoney = await db.sequelize.transaction(async t => {
+            const payment = await db.UserDrinks.findOne({ where: { id: req.params.id }}, { transaction: t });
+            if (!payment) throw new Error('Payment not found');
 
-        await payment.destroy();
+            const drink = await db.Drink.findOne({ where: { id: payment.drinkId }}, { transaction: t });
 
-        res.status(200).send('Ok');
+            const user = await db.User.findOne({ where: { id: payment.userId }}, { transaction: t });
+            const incrementedUser = await user.increment('money', { by: (payment.amount * drink.price) }, { transaction: t });
+
+            await payment.destroy({ transaction: t });
+
+            return incrementedUser.money;
+        })
+
+        res.status(200).json({ money: updatedMoney });
     } catch (err) {
+        console.log(err);
         res.sendStatus(400);
     }
 }

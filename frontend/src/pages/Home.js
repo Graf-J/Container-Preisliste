@@ -1,5 +1,7 @@
 import React from 'react';
 import Header from './components/Header';
+import MoneyBar from './components/MoneyBar';
+import MoneyTabsWrapper from './components/MoneyTabsWrapper';
 import './Home.css';
 
 const Home = () => {
@@ -7,7 +9,8 @@ const Home = () => {
     return (
         <div className='home'>
             <Header />
-            <h1>Home</h1>
+            <MoneyBar />
+            <MoneyTabsWrapper />
         </div>
     )
 }

@@ -1,3 +1,4 @@
+const { QueryTypes } = require('sequelize');
 const db = require('../db/psql');
 
 module.exports.get = async (req, res) => {
@@ -6,7 +7,7 @@ module.exports.get = async (req, res) => {
             attributes: ['id', 'name', 'price'],
             order: [['createdAt', 'DESC']],
             include: [{
-                model: db.DrinkCategory,
+                model: db.Category,
                 attributes: ['id', 'name']
             }]
         });
@@ -14,6 +15,33 @@ module.exports.get = async (req, res) => {
         res.status(200).json(drinks);
     } catch (err) {
         res.status(400).json({ error: err.message });
+    }
+}
+
+module.exports.getPopularDrinks = async (req, res) => {
+    try {
+        const drinks = await db.sequelize.query(`SELECT d.id, d.name, d.price, COALESCE(SUM(ud.amount), 0) AS total, (array_agg(c.name ORDER BY d.id DESC))[1] as category FROM drinks AS d LEFT JOIN user_drinks AS ud ON ud.drink_id = d.id LEFT JOIN categories AS c ON d.category_id = c.id GROUP BY d.id ORDER BY total DESC;`, { type: QueryTypes.SELECT });
+
+        res.status(200).json(drinks);
+    } catch (err) {
+        console.log(err);
+        res.sendStatus(400);
+    }
+}
+
+module.exports.getUserDrinks = async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) throw new Error('TypeError');
+
+        const user = await db.User.findOne({ where: { id: id }});
+        if (!user) throw new Error('No User found');
+
+        const drinks = await db.sequelize.query(`SELECT d.id, d.name, d.price, COALESCE(SUM(ud.amount), 0) AS total, (array_agg(c.name ORDER BY d.id DESC))[1] as category FROM drinks AS d LEFT JOIN user_drinks AS ud ON ud.drink_id = d.id LEFT JOIN categories AS c ON d.category_id = c.id WHERE ud.user_id = ${ id } GROUP BY d.id ORDER BY total DESC;`, { type: QueryTypes.SELECT });
+
+        res.status(200).json(drinks);
+    } catch (err) {
+        res.sendStatus(400);
     }
 }
 
@@ -28,14 +56,14 @@ module.exports.add = async (req, res) => {
             name: req.body.name,
             category: req.body.category,
             price: req.body.price,
-            drinkCategoryId: req.body.drinkCategoryId
+            categoryId: req.body.categoryId
         })
 
         const drinkWithCategory = await db.Drink.findOne({
             where: { id: drink.id },
             attributes: ['id', 'name', 'price'],
             include: [{
-                model: db.DrinkCategory,
+                model: db.Category,
                 attributes: ['id', 'name']
             }]
         })
@@ -52,30 +80,30 @@ module.exports.update = async (req, res) => {
             attributes: ['id', 'name', 'price'],
             where: { id: req.params.id }, 
             include: { 
-                model: db.DrinkCategory,
+                model: db.Category,
                 attributes: ['id', 'name']
             }
         });
         
         if (!drink) {
-            throw new Error('DrinkCategory not found');
+            throw new Error('Drink not found');
         }
 
-        let drinkCategoryChanged = false;
-        if (drink.drinkCategoryId !== req.body.drinkCategoryId) { drinkCategoryChanged = true }
+        let categoryChanged = false;
+        if (drink.categoryId !== req.body.categoryId) { categoryChanged = true }
 
         drink.name = req.body.name;
         drink.price = req.body.price;
-        drink.drinkCategoryId = req.body.drinkCategoryId;
+        drink.categoryId = req.body.categoryId;
 
         await drink.save();
 
-        if (drinkCategoryChanged) {
+        if (categoryChanged) {
             drink = await db.Drink.findOne({ 
                 attributes: ['id', 'name', 'price'],
                 where: { id: req.params.id }, 
                 include: { 
-                    model: db.DrinkCategory,  
+                    model: db.Category,  
                     attributes: ['id', 'name']
                 }
             });

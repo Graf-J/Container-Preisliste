@@ -29,6 +29,16 @@ module.exports.get = async (req, res) => {
     }
 }
 
+module.exports.getSelf = async (req, res) => {
+    try {
+        const user = await db.User.findOne({ attributes: ['id', 'name', 'money'], where: { id: req.userId }});
+
+        res.status(200).json(user);
+    } catch (err) {
+        res.sendStatus(400);
+    }
+}
+
 module.exports.add = async (req, res) => {
     try {
         let user = await db.User.findOne({ where: { name: req.body.name }})

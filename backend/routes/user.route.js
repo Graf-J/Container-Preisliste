@@ -1,10 +1,12 @@
 const { Router } = require('express');
-const { requireAdminAuth } = require('../middleware/requireAuth');
+const { requireAdminAuth, requireUserAuth } = require('../middleware/requireAuth');
 const userController = require('../controllers/user.controller');
 
 const router = Router();
 
-router.get('/', [requireAdminAuth], userController.get)
+router.get('/', [requireAdminAuth], userController.get);
+
+router.get('/self', [requireUserAuth], userController.getSelf);
 
 router.post('/', [requireAdminAuth], userController.add);
 

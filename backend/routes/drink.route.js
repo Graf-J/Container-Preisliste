@@ -6,6 +6,10 @@ const router = Router();
 
 router.get('/', [requireUserAuth], drinkController.get);
 
+router.get('/popular', [requireUserAuth], drinkController.getPopularDrinks);
+
+router.get('/user/:id', [requireAdminAuth], drinkController.getUserDrinks);
+
 router.post('/', [requireAdminAuth], drinkController.add);
 
 router.put('/:id', [requireAdminAuth], drinkController.update);

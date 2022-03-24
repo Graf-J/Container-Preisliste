@@ -70,6 +70,7 @@
 .delete-user-modal-box {
     width: 95vw;
     background: rgb(243, 243, 243);
+    margin-top: -80px;
     border-radius: 10px;
     padding: 30px;
 }

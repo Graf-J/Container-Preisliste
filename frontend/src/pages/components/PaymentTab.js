@@ -18,7 +18,7 @@ import { getEntriesCount, getPayments, addPayment, deletePayment } from '../../s
 import { getPopularDrinks } from '../../services/drinkService';
 import './PaymentTab.css';
 
-const PaymentTab = () => {
+const PaymentTab = ({ getTabHeight }) => {
 
     const [isLoading, setIsLoading] = useState(true);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -46,7 +46,6 @@ const PaymentTab = () => {
     const [isPlusDisabled, setIsPlusDisabled] = useState(true);
     const [isMinusDisabled, setIsMinusDisabled] = useState(true);
 
-    const ref = useRef();
     const toDeletePaymentId = useRef(null);
 
     const { user } = useSelector(state => state.user);
@@ -61,7 +60,7 @@ const PaymentTab = () => {
     const fetchPayments = async (page) => {
         setIsLoading(true);
 
-        const height = ref.current.offsetHeight;
+        const height = getTabHeight();
         const entriesCount = await getEntriesCount();
         const stepsize = Math.floor(height / 60);
         const payments = await getPayments(stepsize, page);
@@ -184,7 +183,7 @@ const PaymentTab = () => {
     }
 
     return (
-        <div ref={ref} className='paymenttab'>
+        <div className='paymenttab'>
             { isLoading ?
             <CircularProgress size={ 100 } style={{ marginTop: '100px' }} /> :
             <>
@@ -285,7 +284,7 @@ const PaymentTab = () => {
                     className='delete-payment-modal'
 			>
 				<div className='delete-payment-modal-box'>
-                    <Typography fontSize={20} style={{ marginBottom: '20px' }}>You are about to delete this payment.</Typography>
+                    <Typography fontSize={20} style={{ marginBottom: '20px' }}>You are about to delete this Payment.</Typography>
                     <div className='modal-button-wrapper'>
 						<Button color='error' variant='outlined' onClick={ () => setIsDeletePaymentModalOpen(false) }>cancel</Button>
 						<Button variant='contained' onClick={ handleDelete }>delete</Button>

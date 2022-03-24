@@ -6,7 +6,9 @@ const router = Router();
 
 router.get('/self', [requireUserAuth], creditController.getOwnCredits);
 
-router.get('/:id', [requireAdminAuth], creditController.getUserCredits);
+router.get('/user/:id', [requireAdminAuth], creditController.getUserCredits);
+
+router.get('/entries', [requireUserAuth], creditController.getEntries);
 
 router.post('/', [requireAdminAuth], creditController.add);
 

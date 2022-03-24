@@ -236,7 +236,7 @@ const Users = () => {
                     className='delete-user-modal'
                 >
                     <div className='delete-user-modal-box'>
-                        <Typography fontSize={ 20 } style={{ marginBottom: '20px' }} color='black'>Are you sure you want to delete the selected user? All Payments of this User will be gone afterwards!</Typography>
+                        <Typography fontSize={ 20 } style={{ marginBottom: '20px' }} color='black'>Are you sure you want to delete the selected user? All Payments and Credits of this User will be gone afterwards!</Typography>
                         <div className='modal-button-wrapper'>
                             <Button color='error' variant='outlined' onClick={ () => setDeleteUserModal(false) }>cancel</Button>
                             <Button variant='contained' onClick={ _deleteUser }>delete</Button>

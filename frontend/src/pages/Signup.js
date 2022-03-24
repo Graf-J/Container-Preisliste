@@ -5,10 +5,12 @@ import { set } from '../redux/user';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import LinearProgress from '@mui/material/LinearProgress';
 import { signup } from '../services/authService';
 import './Login.css';
 
 const Signup = () => {
+    const [isLoading, setIsLoading] = useState(false);
     const [name, setName] = useState();
     const [password, setPassword] = useState();
     const [secondaryPassword, setSecondaryPassword] = useState();
@@ -31,6 +33,8 @@ const Signup = () => {
 
     const onSignup = async () => {
         try {
+            setIsLoading(true);
+
             if (password.length < 8) {
                 setSignupStatus({ unknownUser: false, wrongPassword: true, wrongSecondaryPassword: true, userMessage: '', passwordMessage: 'Password shorter than 8 characters', secondaryPasswordMessage: '' });
                 return;
@@ -40,6 +44,7 @@ const Signup = () => {
                 return;
             }
             const user = await signup(name, password);
+            setIsLoading(false);
             dispatch(set(user));
             navigate('../');
         } catch (err) {
@@ -50,6 +55,7 @@ const Signup = () => {
             } else {
                 setSignupStatus({ unknownUser: true, wrongPassword: true, wrongSecondaryPassword: true, userMessage: '', passwordMessage: '', secondaryPasswordMessage: 'Signup failed' });
             }
+            setIsLoading(false);
         }
     }
 
@@ -85,6 +91,9 @@ const Signup = () => {
                 <div className="login-button-wrapper">
                     <Button variant="outlined" className="login-form-button" onClick={ onLogin }>Log in</Button>
                     <Button variant="contained" className="login-form-button" onClick={ onSignup }>Sign up</Button>
+                </div>
+                <div className='login-progress-wrapper'>
+                    { isLoading && <LinearProgress /> }
                 </div>
             </form>
         </div>

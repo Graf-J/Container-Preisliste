@@ -5,10 +5,12 @@ import { set } from '../redux/user';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import LinearProgress from '@mui/material/LinearProgress';
 import { login } from '../services/authService';
 import './Login.css';
 
 const Login = () => {
+    const [isLoading, setIsLoading] = useState(false);
     const [name, setName] = useState();
     const [password, setPassword] = useState();
     const [loginStatus, setLoginStatus] = useState({
@@ -24,7 +26,10 @@ const Login = () => {
 
     const onLogin = async () => {
         try {
+            setIsLoading(true);
+
             const user = await login(name, password);
+            setIsLoading(false);
             dispatch(set(user));
             navigate('../');
         } catch (err) {
@@ -33,6 +38,7 @@ const Login = () => {
             } else {
                 setLoginStatus({ wrongPassword: true, unknownUser: true, passwordMessage: 'Authentcation failed', useMessage: '' });
             }
+            setIsLoading(false);
         }
     }
 
@@ -63,6 +69,9 @@ const Login = () => {
                 <div className="login-button-wrapper">
                     <Button variant="outlined" className="login-form-button" onClick={ onSignup }>Sign up</Button>
                     <Button variant="contained" className="login-form-button" onClick={ onLogin }>Log in</Button>
+                </div>
+                <div className='login-progress-wrapper'>
+                    { isLoading && <LinearProgress /> }
                 </div>
             </form>
         </div>

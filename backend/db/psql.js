@@ -23,6 +23,7 @@ db.User = require('./models/User.model')(sequelize);
 db.Category = require('./models/Category.model')(sequelize)
 db.Drink = require('./models/Drink.model')(sequelize, db.Category);
 db.UserDrinks = require('./models/UserDrinks.model')(sequelize, db.User, db.Drink);
+db.Credit = require('./models/Credit.model')(sequelize, db.User);
 
 // Associations
 // db.User.belongsToMany(db.Drink, { through: { model: db.UserDrinks, unique: false }, foreignKey: 'userId', onDelete: 'CASCADE' });
@@ -36,5 +37,8 @@ db.Drink.hasMany(db.UserDrinks);
 db.UserDrinks.belongsTo(db.Drink);
 
 db.Drink.belongsTo(db.Category, { onDelete: 'SET NULL', onUpdate: 'CASCADE'});
+
+db.User.hasMany(db.Credit, { onDelete: 'CASCADE' });
+db.Credit.belongsTo(db.User);
 
 module.exports = db;

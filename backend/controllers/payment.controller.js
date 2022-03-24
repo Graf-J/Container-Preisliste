@@ -47,8 +47,11 @@ module.exports.add = async (req, res) => {
             }, { transaction: t });
 
             const drink = await db.Drink.findOne({ where: { id: req.body.drinkId }}, { transaction: t });
+            if (!drink) throw new Error('Drink not found');
 
             const user = await db.User.findOne({ where: { id: req.body.userId }}, { transaction: t });
+            if (!user) throw new Error('User not found');
+
             const updatedUser = await user.decrement('money', { by: (req.body.amount * drink.price)}, { transaction: t });
 
             return updatedUser.money;
@@ -67,13 +70,16 @@ module.exports.delete = async (req, res) => {
             if (!payment) throw new Error('Payment not found');
 
             const drink = await db.Drink.findOne({ where: { id: payment.drinkId }}, { transaction: t });
+            if (!drink) throw new Error('Drink not found');
 
             const user = await db.User.findOne({ where: { id: payment.userId }}, { transaction: t });
-            const incrementedUser = await user.increment('money', { by: (payment.amount * drink.price) }, { transaction: t });
+            if (!user) throw new Error('User not found');
+
+            const updatedUser = await user.increment('money', { by: (payment.amount * drink.price) }, { transaction: t });
 
             await payment.destroy({ transaction: t });
 
-            return incrementedUser.money;
+            return updatedUser.money;
         })
 
         res.status(200).json({ money: updatedMoney });

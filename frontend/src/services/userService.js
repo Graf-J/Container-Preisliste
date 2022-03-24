@@ -19,6 +19,15 @@ export async function getSelf() {
     }
 }
 
+export async function getUser(userId) {
+    try {
+        const user = await axios.get(`${URL}/user/user/${userId}`, { withCredentials: true });
+        return { name: user.data.name, money: user.data.money };
+    } catch (err) {
+        throw new Error('GET User failed');
+    }
+}
+
 export async function toggleUserRole(userId) {
     try {
         const user = await axios.get(`${URL}/user/toggleRole/${userId}`, { withCredentials: true });

@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { set } from '../../redux/user';
+import { useParams } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
@@ -13,17 +12,15 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import Pagination from '@mui/material/Pagination';
 import Modal from '@mui/material/Modal';
-import jwt_decode from 'jwt-decode';
-import { getEntriesCount, getPayments, addPayment, deletePayment } from '../../services/paymentService';
+import { getEntriesCountAsAdmin, getPaymentsAsAdmin, addPaymentAsAdmin, deletePayment } from '../../services/paymentService';
 import { getPopularDrinks } from '../../services/drinkService';
 import './PaymentTab.css';
 
-const PaymentTab = ({ getTabHeight }) => {
+const AdminPaymentTab = ({ getTabHeight, user, setUser }) => {
 
     const [isLoading, setIsLoading] = useState(true);
     const [isDeleting, setIsDeleting] = useState(false);
     const [isCollectingDrinks, setIsCollectingDrinks] = useState(false);
-    const [isAdmin, setIsAdmin] = useState(false);
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
     const [isAddPaymentModalOpen, setIsAddPaymentModalOpen] = useState(false);
     const [isDeletePaymentModalOpen, setIsDeletePaymentModalOpen] = useState(false);
@@ -46,14 +43,11 @@ const PaymentTab = ({ getTabHeight }) => {
     const [isPlusDisabled, setIsPlusDisabled] = useState(true);
     const [isMinusDisabled, setIsMinusDisabled] = useState(true);
 
+    const { userId } = useParams();
+
     const toDeletePaymentId = useRef(null);
 
-    const { user } = useSelector(state => state.user);
-
-    const dispatch = useDispatch();
-
     useEffect(() => {
-        if (jwt_decode(user.jwt).role === 'admin') setIsAdmin(true);
         fetchPayments(1)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -62,9 +56,9 @@ const PaymentTab = ({ getTabHeight }) => {
         setIsLoading(true);
 
         const height = getTabHeight();
-        const entriesCount = await getEntriesCount();
+        const entriesCount = await getEntriesCountAsAdmin(userId);
         const stepsize = Math.floor(height / 60);
-        const payments = await getPayments(stepsize, page);
+        const payments = await getPaymentsAsAdmin(userId, stepsize, page);
         setPageCount(Math.ceil(entriesCount / stepsize));
         setPayments(payments);
 
@@ -92,7 +86,7 @@ const PaymentTab = ({ getTabHeight }) => {
         setIsDeleting(id);
 
         const money = await deletePayment(id);
-        dispatch(set({ name: user.name, money: money, jwt: user.jwt }));
+        setUser({ name: user.name, money: money });
         let paymentsCopy = [...payments];
         paymentsCopy = paymentsCopy.filter((value) => {
             return value.id !== id;
@@ -173,8 +167,8 @@ const PaymentTab = ({ getTabHeight }) => {
             onAddPaymentModalClose()
             setIsLoading(true);
 
-            const money = await addPayment({ amount: damount, drinkId: did });
-            dispatch(set({ name: user.name, money: money, jwt: user.jwt }));
+            const money = await addPaymentAsAdmin(userId, { amount: damount, drinkId: did });
+            setUser({ name: user.name, money: money });
 
             await fetchPayments(page);
         } catch (err) {
@@ -190,13 +184,13 @@ const PaymentTab = ({ getTabHeight }) => {
                 <div className='payment-list'>
                     { payments.map(payment => (
                         <div key={ payment.id } className='payment-entry'>
-                            { isAdmin && <div className='payment-entry-delete-wrapper'>
+                            <div className='payment-entry-delete-wrapper'>
                                 { isDeleting && isDeleting === payment.id ? 
                                 <CircularProgress /> :
                                 <IconButton color="error" onClick={ () => handleDeleteClick(payment.id) }>
                                     <DeleteIcon />
                                 </IconButton> }
-                            </div> }
+                            </div>
                             <div className='payment-entry-info-wrapper' onClick={ () => handlePaymentInfoClick(payment) }>
                                 <Typography color='white' fontSize={ 20 } style={{ maxWidth: '180px', marginLeft: '8px', textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap' }}>{ payment.amount }x { payment.drink }</Typography>
                                 <div className='payment-label'>
@@ -260,7 +254,7 @@ const PaymentTab = ({ getTabHeight }) => {
 						sx={{ width: '100%' }}
 						isOptionEqualToValue={(option, value) => option.id === value.id}
 						onChange={ handleAutocmopleteChange }
-						renderInput={ params => <TextField error={ false } {...params} label='Drink'/>}
+						renderInput={ params => <TextField error={ false } {...params} label='Drink'/> }
 				    />
                     <div className='add-payment-modal-amount-wrapper'>
                         <IconButton disabled={ isMinusDisabled } color="error" size='large' onClick={ handleMinusClick }>
@@ -295,4 +289,4 @@ const PaymentTab = ({ getTabHeight }) => {
     )
 }
 
-export default PaymentTab;
+export default AdminPaymentTab;

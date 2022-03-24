@@ -39,6 +39,19 @@ module.exports.getSelf = async (req, res) => {
     }
 }
 
+module.exports.getUser = async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) throw new Error('Type Error');
+
+        const user = await db.User.findOne({ attributes: ['id', 'name', 'money'], where: { id: id }});
+
+        res.status(200).json(user);
+    } catch (err) {
+        res.sendStatus(400);
+    }
+}
+
 module.exports.add = async (req, res) => {
     try {
         let user = await db.User.findOne({ where: { name: req.body.name }})

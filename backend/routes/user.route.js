@@ -8,6 +8,8 @@ router.get('/', [requireAdminAuth], userController.get);
 
 router.get('/self', [requireUserAuth], userController.getSelf);
 
+router.get('/user/:id', [requireAdminAuth], userController.getUser);
+
 router.post('/', [requireAdminAuth], userController.add);
 
 router.get('/toggleRole/:id', [requireAdminAuth], userController.toggleRole);

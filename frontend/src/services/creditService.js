@@ -28,6 +28,15 @@ export async function getEntriesCount() {
     }
 }
 
+export async function getEntriesCountAsAdmin(userId) {
+    try {
+        const entriesCount = await axios.get(`${URL}/credit/entries/${userId}`, { withCredentials: true });
+        return entriesCount.data.count;
+    } catch (err) {
+        throw new Error('GET EntriesCount failed');
+    }
+}
+
 export async function addCredit(credit) {
     try {
         const result = await axios.post(`${URL}/credit`, { money: credit.money, userId: credit.userId }, { withCredentials: true });

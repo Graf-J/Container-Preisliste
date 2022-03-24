@@ -52,6 +52,23 @@ module.exports.getEntries = async (req, res) => {
     }
 }
 
+module.exports.getEntriesAsAdmin = async (req, res) => {
+    try {
+        const id = parseInt(req.params.id);
+        if (isNaN(id)) throw new Error('Type Error');
+
+
+        const result = await db.sequelize.query(`SELECT COUNT(*) FROM credits WHERE user_id = ${ id };`, { type: QueryTypes.SELECT });
+        numEntries = parseInt(result[0].count);
+
+        if (isNaN(numEntries)) throw new Error('Type Error');
+
+        res.status(200).json({ count: numEntries });
+    } catch (err) {
+        res.sendStatus(400);
+    }
+}
+
 module.exports.add = async (req, res) => {
     try {
         const updatedMoney = await db.sequelize.transaction(async t => {

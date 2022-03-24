@@ -10,6 +10,8 @@ router.get('/user/:id', [requireAdminAuth], creditController.getUserCredits);
 
 router.get('/entries', [requireUserAuth], creditController.getEntries);
 
+router.get('/entries/:id', [requireAdminAuth], creditController.getEntriesAsAdmin);
+
 router.post('/', [requireAdminAuth], creditController.add);
 
 router.delete('/:id', [requireAdminAuth], creditController.delete);

@@ -10,6 +10,15 @@ export async function getPayments(stepsize, page) {
     }
 }
 
+export async function getPaymentsAsAdmin(userId, stepsize, page) {
+    try {
+        const payments = await axios.get(`${URL}/payment/user/${userId}?stepsize=${stepsize}&page=${page}`, { withCredentials: true });
+        return payments.data;
+    } catch (err) {
+        throw new Error('GET Payments failed');
+    }
+}
+
 export async function getEntriesCount() {
     try {
         const entriesCount = await axios.get(`${URL}/payment/entries`, { withCredentials: true });
@@ -19,9 +28,27 @@ export async function getEntriesCount() {
     }
 }
 
+export async function getEntriesCountAsAdmin(userId) {
+    try {
+        const entriesCount = await axios.get(`${URL}/payment/entries/${userId}`, { withCredentials: true });
+        return entriesCount.data.count;
+    } catch (err) {
+        throw new Error('GET EntriesCount failed');
+    }
+}
+
 export async function addPayment(payment) {
     try {
-        const result = await axios.post(`${URL}/payment`, { amount: payment.amount, userId: payment.userId, drinkId: payment.drinkId }, { withCredentials: true });
+        const result = await axios.post(`${URL}/payment`, { amount: payment.amount, drinkId: payment.drinkId }, { withCredentials: true });
+        return result.data.money;
+    } catch (err) {
+        throw new Error('Add Drink failed');
+    }
+}
+
+export async function addPaymentAsAdmin(userId, payment) {
+    try {
+        const result = await axios.post(`${URL}/payment/${userId}`, { amount: payment.amount, drinkId: payment.drinkId }, { withCredentials: true });
         return result.data.money;
     } catch (err) {
         throw new Error('Add Drink failed');

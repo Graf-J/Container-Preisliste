@@ -8,8 +8,9 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Users from './pages/Users';
 import Drinks from './pages/Drinks';
-import Overall from './pages/Overall';
 import Dashboard from './pages/Dashboard';
+import AdminHome from './pages/AdminHome';
+import AdminDashboard from './pages/AdminDashboard';
 import NotFound from './pages/NotFound';
 
 function App() {
@@ -22,7 +23,8 @@ function App() {
         <Route path="dashboard/:userId" element={ <PersonalPage element={ <Dashboard /> } /> } />
         <Route path="users" element={ <AdminPage element={ <Users /> } /> } />
         <Route path="drinks" element={ <AdminPage element={ <Drinks /> } /> } />
-        <Route path="overall" element={ <AdminPage element={ <Overall /> } /> } />
+        <Route path="admin/home/:userId" element={ <AdminPage element={ <AdminHome /> } /> } />
+        <Route path="admin/dashboard/:userId" element={ <AdminPage element={ <AdminDashboard /> } /> } />
         <Route path="*" element={ <NotFound /> }/>
       </Routes>
     </div>

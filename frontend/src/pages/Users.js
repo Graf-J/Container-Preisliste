@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom'
 import CircularProgress from '@mui/material/CircularProgress';
 import LinearProgress from '@mui/material/LinearProgress';
 import Accordion from '@mui/material/Accordion';
@@ -53,6 +54,8 @@ const Users = () => {
 
         getData();
     }, [user.jwt])
+
+    const navigate = useNavigate();
 
     const getMoneyStyle = (money) => {
         let color = ''
@@ -118,8 +121,12 @@ const Users = () => {
         setIsDeleteUserLoading(false);
     }
 
-    const onViewDashboardClick = async (userId) => {
-        console.log('navigate to dashboard of ', userId);
+    const onViewHomeClick = (userId) => {
+        navigate(`/admin/home/${ userId }`);
+    }
+
+    const onViewDashboardClick = (userId) => {
+        navigate(`/admin/dashboard/${ userId }`);
     }
 
     const onCreateUserCancleClick = async () => {
@@ -182,7 +189,10 @@ const Users = () => {
                                         <Typography color='#CCC'>User: </Typography>
                                         <Button variant="contained" color='error' startIcon={<DeleteIcon />} onClick={ () => onDeleteUserClick(user.id) }>Delete</Button>
                                     </div>
-                                    <Button variant="outlined" style={{ width: '100%' }} onClick={ () => onViewDashboardClick(user.id) }>View Dashboard</Button>       
+                                    <div className='user-sites-button-wrapper'>
+                                        <Button variant="outlined" style={{ width: '46%' }} onClick={ () => onViewHomeClick(user.id) }>Home</Button>    
+                                        <Button variant="outlined" color='warning' style={{ width: '46%' }} onClick={ () => onViewDashboardClick(user.id) }>Dashboard</Button>          
+                                    </div>
                                     { isAdminLoading && <LinearProgress style={{ marginTop: '7px' }} /> }
                                 </AccordionDetails>
                             </Accordion>

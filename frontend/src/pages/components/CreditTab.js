@@ -48,6 +48,7 @@ const CreditTab = ({ getTabHeight }) => {
     useEffect(() => {
         if (jwt_decode(user.jwt).role === 'admin') setIsAdmin(true);
         fetchCredits(1);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const fetchCredits = async () => {
@@ -148,11 +149,11 @@ const CreditTab = ({ getTabHeight }) => {
                     )) }
                 </div>
                 { isAdmin ?
-                    <IconButton color="primary" size='large' style={{ position: 'absolute', bottom: '8%', right: '7%' }} onClick={ () => setIsAddCreditModalOpen(true) }>
+                    <IconButton color="primary" size='large' style={{ position: 'absolute', bottom: '10%', right: '7%' }} onClick={ () => setIsAddCreditModalOpen(true) }>
                         <AddIcon fontSize='large'/>
                     </IconButton> : 
                 <></> }
-                <IconButton color="primary" size='large' style={{ position: 'absolute', bottom: '8%', left: '7%' }} onClick={ handleRefresh }>
+                <IconButton color="primary" size='large' style={{ position: 'absolute', bottom: '10%', left: '7%' }} onClick={ handleRefresh }>
                     <CachedIcon fontSize='large'/>
                 </IconButton>
                 <Pagination className='paginator' onChange={ handlePaginationChange } page={ page } count={ pageCount } size='small' color="success" />

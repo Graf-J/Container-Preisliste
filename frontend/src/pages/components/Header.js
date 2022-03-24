@@ -11,7 +11,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import LiquorIcon from '@mui/icons-material/Liquor';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { clear } from '../../redux/user';
 import { logout } from '../../services/authService';
 import './Header.css'
@@ -28,6 +27,7 @@ const Header = () => {
         if (decodedToken.role === 'admin') {
             setIsAdmin(true);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const navigate = useNavigate();
@@ -59,7 +59,6 @@ const Header = () => {
                 <div className='drawer'>
                     <Button variant="outlined" onClick={ () => navigate('../../') } startIcon={<HomeIcon />}>Home</Button>
                     <Button variant="outlined" onClick={ onDashboardClick } startIcon={<DashboardIcon />} style={{ marginTop: '10px' }}>Dashboard</Button>
-                    { isAdmin && <Button variant="outlined" color='secondary' onClick={ () => navigate('../../overall') } startIcon={<RemoveRedEyeIcon />} style={{ marginTop: '10px' }}>Overall</Button> }
                     { isAdmin && <Button variant="outlined" color='secondary' onClick={ () => navigate('../../users') } startIcon={<ManageAccountsIcon />} style={{ marginTop: '10px' }}>Users</Button> }
                     { isAdmin && <Button variant="outlined" color='secondary' onClick={ () => navigate('../../drinks') } startIcon={<LiquorIcon />} style={{ marginTop: '10px' }}>Drinks</Button> }
                 </div>

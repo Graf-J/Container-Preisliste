@@ -18,6 +18,12 @@
     box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
+.user-sites-button-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .user-icons-wrapper {
     width: 50%;
     display: flex;

@@ -55,6 +55,7 @@ const PaymentTab = ({ getTabHeight }) => {
     useEffect(() => {
         if (jwt_decode(user.jwt).role === 'admin') setIsAdmin(true);
         fetchPayments(1)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const fetchPayments = async (page) => {
@@ -208,10 +209,10 @@ const PaymentTab = ({ getTabHeight }) => {
                 </div>
                 { isCollectingDrinks ? 
                 <CircularProgress size={30} style={{ position: 'absolute', bottom: '10%', right: '12%' }}/> :
-                <IconButton color="primary" size='large' style={{ position: 'absolute', bottom: '8%', right: '7%' }} onClick={ handleAddPaymentClick }>
+                <IconButton color="primary" size='large' style={{ position: 'absolute', bottom: '10%', right: '7%' }} onClick={ handleAddPaymentClick }>
                     <AddIcon fontSize='large'/>
                 </IconButton> }
-                <IconButton color="primary" size='large' style={{ position: 'absolute', bottom: '8%', left: '7%' }} onClick={ handleRefresh }>
+                <IconButton color="primary" size='large' style={{ position: 'absolute', bottom: '10%', left: '7%' }} onClick={ handleRefresh }>
                     <CachedIcon fontSize='large'/>
                 </IconButton>
                 <Pagination className='paginator' onChange={ handlePaginationChange } page={ page } count={ pageCount } size='small' color="error" />

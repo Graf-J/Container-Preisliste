@@ -37,7 +37,7 @@ export async function getPopularDrinksAsAdmin(userId) {
     }
 }
 
-export async function getPopularCategories() {
+export async function getPaymentPerWeekday() {
     try {
         const result = await axios.get(`${URL}/plot/weekdaypayment`, { withCredentials: true });
         return result.data;
@@ -46,7 +46,7 @@ export async function getPopularCategories() {
     }
 }
 
-export async function getPopularCategoriesAsAdmin(userId) {
+export async function getPaymentPerWeekdayAsAdmin(userId) {
     try {
         const result = await axios.get(`${URL}/plot/weekdaypayment/${userId}`, { withCredentials: true });
         return result.data;

@@ -1,6 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Chart as ChartJS, ArcElement, Legend, BarElement, LinearScale, CategoryScale, Tooltip } from 'chart.js';
+import { Chart as ChartJS, ArcElement, Legend, BarElement, LinearScale, CategoryScale } from 'chart.js';
 import { Pie, Doughnut, Bar } from 'react-chartjs-2';
 import CircularProgress from '@mui/material/CircularProgress';
 import Header from './components/Header';
@@ -33,6 +33,7 @@ const AdminDashboard = () => {
         const width = dashboardWrapperRef.current.offsetWidth;
         setDashboardSectionWidth(Math.round(width * 0.85));
         fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const fetchData = async () => {

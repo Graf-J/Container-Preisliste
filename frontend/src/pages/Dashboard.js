@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
-import { Chart as ChartJS, ArcElement, Legend, BarElement, LinearScale, CategoryScale, Tooltip } from 'chart.js';
+import { Chart as ChartJS, ArcElement, Legend, BarElement, LinearScale, CategoryScale } from 'chart.js';
 import { Pie, Doughnut, Bar } from 'react-chartjs-2';
 import CircularProgress from '@mui/material/CircularProgress';
 import Header from './components/Header';
@@ -30,6 +30,7 @@ const Dashboard = () => {
         const width = dashboardWrapperRef.current.offsetWidth;
         setDashboardSectionWidth(Math.round(width * 0.85));
         fetchData();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const fetchData = async () => {

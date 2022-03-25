@@ -4,6 +4,12 @@
     margin-top: 50px;
 }
 
+.admin-dashboard {
+    height: calc(100vh - 50px);
+    margin-top: 50px;
+    background: #444900;
+}
+
 .dashboard-body {
     width: 100%;
     height: 100%;

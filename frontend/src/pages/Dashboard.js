@@ -1,5 +1,5 @@
 import { useRef, useEffect, useState } from 'react';
-import { Chart as ChartJS, ArcElement, Legend, Title, BarElement, LinearScale, CategoryScale, Tooltip } from 'chart.js';
+import { Chart as ChartJS, ArcElement, Legend, BarElement, LinearScale, CategoryScale, Tooltip } from 'chart.js';
 import { Pie, Doughnut, Bar } from 'react-chartjs-2';
 import CircularProgress from '@mui/material/CircularProgress';
 import Header from './components/Header';

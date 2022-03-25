@@ -29,22 +29,6 @@ module.exports.getPopularDrinks = async (req, res) => {
     }
 }
 
-module.exports.getUserDrinks = async (req, res) => {
-    try {
-        const id = parseInt(req.params.id);
-        if (isNaN(id)) throw new Error('TypeError');
-
-        const user = await db.User.findOne({ where: { id: id }});
-        if (!user) throw new Error('No User found');
-
-        const drinks = await db.sequelize.query(`SELECT d.id, d.name, d.price, COALESCE(SUM(ud.amount), 0) AS total, (array_agg(c.name ORDER BY d.id DESC))[1] as category FROM drinks AS d LEFT JOIN user_drinks AS ud ON ud.drink_id = d.id LEFT JOIN categories AS c ON d.category_id = c.id WHERE ud.user_id = ${ id } GROUP BY d.id ORDER BY total DESC;`, { type: QueryTypes.SELECT });
-
-        res.status(200).json(drinks);
-    } catch (err) {
-        res.sendStatus(400);
-    }
-}
-
 module.exports.add = async (req, res) => {
     try {
         const duplicate = await db.Drink.findOne({ where: { name: req.body.name }})

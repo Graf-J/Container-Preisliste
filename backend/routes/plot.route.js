@@ -1,20 +1,21 @@
 const { Router } = require('express');
+const { requireAdminAuthSession, requireUserAuthSession } = require('../middleware/requireAuthSession');
 const { requireAdminAuth, requireUserAuth } = require('../middleware/requireAuth');
 const plotController = require('../controllers/plot.controller');
 
 const router = Router();
 
-router.get('/categories', [requireUserAuth], plotController.getOwnCategories);
+router.get('/categories', [requireUserAuthSession], plotController.getOwnCategories);
 
-router.get('/categories/:id', [requireAdminAuth], plotController.getUsersCategories);
+router.get('/categories/:id', [requireAdminAuthSession], plotController.getUsersCategories);
 
-router.get('/drinks', [requireUserAuth], plotController.getOwnDrinks);
+router.get('/drinks', [requireUserAuthSession], plotController.getOwnDrinks);
 
-router.get('/drinks/:id', [requireAdminAuth], plotController.getUsersDrinks);
+router.get('/drinks/:id', [requireAdminAuthSession], plotController.getUsersDrinks);
 
-router.get('/weekdaypayment', [requireUserAuth], plotController.getOwnPaymentPerWeekday);
+router.get('/weekdaypayment', [requireUserAuthSession], plotController.getOwnPaymentPerWeekday);
 
-router.get('/weekdaypayment/:id', [requireAdminAuth], plotController.getUsersPaymentPerWeekday);
+router.get('/weekdaypayment/:id', [requireAdminAuthSession], plotController.getUsersPaymentPerWeekday);
 
 
 

@@ -3,7 +3,10 @@ import URL from './serverURL';
 
 export async function getPopularCategories() {
     try {
-        const result = await axios.get(`${URL}/plot/categories`, { withCredentials: true });
+        const token = sessionStorage.getItem('jwt');
+        const result = await axios.get(`${URL}/plot/categories`, { withCredentials: true, headers: {
+            Authorization: 'Bearer ' + token
+        } });
         return result.data;
     } catch (err) {
         throw new Error('GET Popular Categories failed');
@@ -12,7 +15,10 @@ export async function getPopularCategories() {
 
 export async function getPopularCategoriesAsAdmin(userId) {
     try {
-        const result = await axios.get(`${URL}/plot/categories/${userId}`, { withCredentials: true });
+        const token = sessionStorage.getItem('jwt');
+        const result = await axios.get(`${URL}/plot/categories/${userId}`, { withCredentials: true, headers: {
+            Authorization: 'Bearer ' + token
+        } });
         return result.data;
     } catch (err) {
         throw new Error('GET Popular Categories failed');
@@ -21,7 +27,10 @@ export async function getPopularCategoriesAsAdmin(userId) {
 
 export async function getPopularDrinks() {
     try {
-        const result = await axios.get(`${URL}/plot/drinks`, { withCredentials: true });
+        const token = sessionStorage.getItem('jwt');
+        const result = await axios.get(`${URL}/plot/drinks`, { withCredentials: true, headers: {
+            Authorization: 'Bearer ' + token
+        } });
         return result.data;
     } catch (err) {
         throw new Error('GET Popular Drinks failed');
@@ -30,7 +39,10 @@ export async function getPopularDrinks() {
 
 export async function getPopularDrinksAsAdmin(userId) {
     try {
-        const result = await axios.get(`${URL}/plot/drinks/${userId}`, { withCredentials: true });
+        const token = sessionStorage.getItem('jwt');
+        const result = await axios.get(`${URL}/plot/drinks/${userId}`, { withCredentials: true, headers: {
+            Authorization: 'Bearer ' + token
+        } });
         return result.data;
     } catch (err) {
         throw new Error('GET Popular Drinks failed');
@@ -39,7 +51,10 @@ export async function getPopularDrinksAsAdmin(userId) {
 
 export async function getPaymentPerWeekday() {
     try {
-        const result = await axios.get(`${URL}/plot/weekdaypayment`, { withCredentials: true });
+        const token = sessionStorage.getItem('jwt');
+        const result = await axios.get(`${URL}/plot/weekdaypayment`, { withCredentials: true, headers: {
+            Authorization: 'Bearer ' + token
+        } });
         return result.data;
     } catch (err) {
         throw new Error('GET WeekdayPayment failed');
@@ -48,7 +63,10 @@ export async function getPaymentPerWeekday() {
 
 export async function getPaymentPerWeekdayAsAdmin(userId) {
     try {
-        const result = await axios.get(`${URL}/plot/weekdaypayment/${userId}`, { withCredentials: true });
+        const token = sessionStorage.getItem('jwt');
+        const result = await axios.get(`${URL}/plot/weekdaypayment/${userId}`, { withCredentials: true, headers: {
+            Authorization: 'Bearer ' + token
+        } });
         return result.data;
     } catch (err) {
         throw new Error('GET WeekdayPayment failed');

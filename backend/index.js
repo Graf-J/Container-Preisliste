@@ -6,7 +6,7 @@ const db = require('./db/psql');
 
 const app = express();
 
-app.set('trust proxy', 1);
+// app.set('trust proxy', 1);
 
 // app.use(
 //     session({
@@ -22,8 +22,12 @@ app.set('trust proxy', 1);
 
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', process.env.WEB_URL);
+    // res.header("Access-Control-Allow-Headers","*");
+    // res.header('Access-Control-Request-Headers', 'GET,PUT,POST,DELETE,PATCH,OPTIONS')
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,PATCH,OPTIONS');
+    // res.header("Access-Control-Allow-Headers","Authorization");
     res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
     next();
 });

@@ -1,15 +1,16 @@
 const { Router } = require('express');
+const { requireAdminAuthSession, requireUserAuthSession } = require('../middleware/requireAuthSession');
 const { requireUserAuth, requireAdminAuth } = require('../middleware/requireAuth');
 const categoryController = require('../controllers/category.controller');
 
 const router = Router();
 
-router.get('/', [requireUserAuth], categoryController.get);
+router.get('/', [requireUserAuthSession], categoryController.get);
 
-router.post('/', [requireAdminAuth], categoryController.add);
+router.post('/', [requireAdminAuthSession], categoryController.add);
 
-router.put('/:id', [requireAdminAuth], categoryController.update);
+router.put('/:id', [requireAdminAuthSession], categoryController.update);
 
-router.delete('/:id', [requireAdminAuth], categoryController.delete);
+router.delete('/:id', [requireAdminAuthSession], categoryController.delete);
 
 module.exports = router;

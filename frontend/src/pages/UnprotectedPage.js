@@ -13,7 +13,8 @@ const UnprotectedPage = ({ element }) => {
             return false;
         }
         else if (document.cookie) {
-            dispatch(set({ name: null, money: null, jwt: document.cookie.split('=')[1] }));
+            // dispatch(set({ name: null, money: null, jwt: document.cookie.split('=')[1] }));
+            dispatch(set({ name: null, money: null, jwt: sessionStorage.getItem('jwt') }));
             return false;
         }
         return true;

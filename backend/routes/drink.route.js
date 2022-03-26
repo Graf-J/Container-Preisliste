@@ -1,17 +1,18 @@
 const { Router } = require('express');
+const { requireAdminAuthSession, requireUserAuthSession } = require('../middleware/requireAuthSession');
 const { requireUserAuth, requireAdminAuth } = require('../middleware/requireAuth');
 const drinkController = require('../controllers/drink.controller');
 
 const router = Router();
 
-router.get('/', [requireUserAuth], drinkController.get);
+router.get('/', [requireUserAuthSession], drinkController.get);
 
-router.get('/popular', [requireUserAuth], drinkController.getPopularDrinks);
+router.get('/popular', [requireUserAuthSession], drinkController.getPopularDrinks);
 
-router.post('/', [requireAdminAuth], drinkController.add);
+router.post('/', [requireAdminAuthSession], drinkController.add);
 
-router.put('/:id', [requireAdminAuth], drinkController.update);
+router.put('/:id', [requireAdminAuthSession], drinkController.update);
 
-router.delete('/:id', [requireAdminAuth], drinkController.delete);
+router.delete('/:id', [requireAdminAuthSession], drinkController.delete);
 
 module.exports = router;

@@ -4,6 +4,7 @@ import URL from './serverURL';
 export async function login(name, password) {
     try {
         const response = await axios.post(`${URL}/auth/login`, { name, password }, { withCredentials: true });
+        sessionStorage.setItem("jwt", response.data.jwt);
         return response.data;
     } catch (err) {
         const error = String(err);
@@ -16,12 +17,14 @@ export async function login(name, password) {
 }
 
 export async function logout() {
-    await axios.get(`${URL}/auth/logout`, { withCredentials: true });
+    // await axios.get(`${URL}/auth/logout`, { withCredentials: true });
+    sessionStorage.clear();
 }
 
 export async function signup(name, password) {
     try {
         const response = await axios.post(`${URL}/auth/signup`, { name, password }, { withCredentials: true });
+        sessionStorage.setItem("jwt", response.data.jwt);
         return response.data;
     } catch (err) {
         const error = String(err);

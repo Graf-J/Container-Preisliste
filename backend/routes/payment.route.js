@@ -1,21 +1,22 @@
 const { Router } = require('express');
+const { requireAdminAuthSession, requireUserAuthSession } = require('../middleware/requireAuthSession');
 const { requireUserAuth, requireAdminAuth } = require('../middleware/requireAuth');
 const paymentController = require('../controllers/payment.controller');
 
 const router = Router();
 
-router.get('/', [requireUserAuth], paymentController.get);
+router.get('/', [requireUserAuthSession], paymentController.get);
 
-router.get('/user/:id', [requireAdminAuth], paymentController.getAsAdmin);
+router.get('/user/:id', [requireAdminAuthSession], paymentController.getAsAdmin);
 
-router.get('/entries', [requireUserAuth], paymentController.getEntries);
+router.get('/entries', [requireUserAuthSession], paymentController.getEntries);
 
-router.get('/entries/:id', [requireAdminAuth], paymentController.getEntriesAsAdmin);
+router.get('/entries/:id', [requireAdminAuthSession], paymentController.getEntriesAsAdmin);
 
-router.post('/', [requireUserAuth], paymentController.add);
+router.post('/', [requireUserAuthSession], paymentController.add);
 
-router.post('/:id', [requireAdminAuth], paymentController.addAsAdmin);
+router.post('/:id', [requireAdminAuthSession], paymentController.addAsAdmin);
 
-router.delete('/:id', [requireAdminAuth], paymentController.delete);
+router.delete('/:id', [requireAdminAuthSession], paymentController.delete);
 
 module.exports = router;

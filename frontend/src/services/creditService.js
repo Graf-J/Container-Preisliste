@@ -3,7 +3,10 @@ import URL from './serverURL';
 
 export async function getOwnCredits(stepsize, page) {
     try {
-        const credits = await axios.get(`${URL}/credit/self?stepsize=${stepsize}&page=${page}`, { withCredentials: true });
+        const token = sessionStorage.getItem('jwt');
+        const credits = await axios.get(`${URL}/credit/self?stepsize=${stepsize}&page=${page}`, { withCredentials: true, headers: {
+            Authorization: 'Bearer ' + token
+        } });
         return credits.data;
     } catch (err) {
         throw new Error('GET Credits failed');
@@ -12,7 +15,10 @@ export async function getOwnCredits(stepsize, page) {
 
 export async function getUserCredits(userId, stepsize, page) {
     try {
-        const credits = await axios.get(`${URL}/credit/user/${ userId }?stepsize=${stepsize}&page=${page}`, { withCredentials: true });
+        const token = sessionStorage.getItem('jwt');
+        const credits = await axios.get(`${URL}/credit/user/${ userId }?stepsize=${stepsize}&page=${page}`, { withCredentials: true, headers: {
+            Authorization: 'Bearer ' + token
+        } });
         return credits.data;
     } catch (err) {
         throw new Error('GET Credits failed');
@@ -21,7 +27,10 @@ export async function getUserCredits(userId, stepsize, page) {
 
 export async function getEntriesCount() {
     try {
-        const entriesCount = await axios.get(`${URL}/credit/entries`, { withCredentials: true });
+        const token = sessionStorage.getItem('jwt');
+        const entriesCount = await axios.get(`${URL}/credit/entries`, { withCredentials: true, headers: {
+            Authorization: 'Bearer ' + token
+        } });
         return entriesCount.data.count;
     } catch (err) {
         throw new Error('GET EntriesCount failed');
@@ -30,7 +39,10 @@ export async function getEntriesCount() {
 
 export async function getEntriesCountAsAdmin(userId) {
     try {
-        const entriesCount = await axios.get(`${URL}/credit/entries/${userId}`, { withCredentials: true });
+        const token = sessionStorage.getItem('jwt');
+        const entriesCount = await axios.get(`${URL}/credit/entries/${userId}`, { withCredentials: true, headers: {
+            Authorization: 'Bearer ' + token
+        } });
         return entriesCount.data.count;
     } catch (err) {
         throw new Error('GET EntriesCount failed');
@@ -39,7 +51,10 @@ export async function getEntriesCountAsAdmin(userId) {
 
 export async function addCredit(credit) {
     try {
-        const result = await axios.post(`${URL}/credit`, { money: credit.money, userId: credit.userId }, { withCredentials: true });
+        const token = sessionStorage.getItem('jwt');
+        const result = await axios.post(`${URL}/credit`, { money: credit.money, userId: credit.userId }, { withCredentials: true, headers: {
+            Authorization: 'Bearer ' + token
+        } });
         return result.data.money;
     } catch (err) {
         throw new Error('Add Credit failed');
@@ -48,7 +63,10 @@ export async function addCredit(credit) {
 
 export async function deleteCredit(id) {
     try {
-        const result = await axios.delete(`${URL}/credit/${ id }`, { withCredentials: true });
+        const token = sessionStorage.getItem('jwt');
+        const result = await axios.delete(`${URL}/credit/${ id }`, { withCredentials: true, headers: {
+            Authorization: 'Bearer ' + token
+        } });
         return result.data.money;
     } catch (err) {
         throw new Error('DELETE Credit failed');

@@ -1,9 +1,24 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 require('dotenv').config();
+// var session = require('express-session');
 const db = require('./db/psql');
 
 const app = express();
+
+app.set('trust proxy', 1);
+
+// app.use(
+//     session({
+//       secret: process.env.SESSION_SECRET || 'Super Secret (change it)',
+//       resave: true,
+//       saveUninitialized: false,
+//       cookie: {
+//         sameSite: 'none', // must be 'none' to enable cross-site delivery
+//         secure: true, // must be true if sameSite='none'
+//       }
+//     })
+//   );
 
 app.use(function(req, res, next) {
     res.header('Access-Control-Allow-Origin', process.env.WEB_URL);

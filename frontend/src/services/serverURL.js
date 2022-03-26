@@ -1,4 +1,4 @@
-// const URL = 'http://localhost:8080';
-const URL = 'https://git.heroku.com/container-preisliste.git';
+const URL = 'http://localhost:8080';
+// const URL = 'https://container-preisliste.herokuapp.com';
 
 export default URL;
